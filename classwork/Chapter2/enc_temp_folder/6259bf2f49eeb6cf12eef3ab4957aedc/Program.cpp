@@ -102,12 +102,9 @@ void main()
     std::string lastName;
 
     //Perimeter of a rectangle
-    //int length;
-    //int width;
-
-    int length, width; // You are declaring this to the compiler, you are making this easier.
- /*   int perimeter;*/
-    // You can also do all of them too. This includes the firstName and lastName.
+    int length;
+    int width;
+    int perimeter;
 
     // Write to a variable using the assignment operator
     length = 10;
@@ -127,7 +124,7 @@ void main()
     // "Long" is 4 bytes from + - 2 billion
     // These are the signed types (being positive or negative)
     
-    // unsigned types are always positive from 0 to the byte range.
+    //unsigned types are always positive from 0 to the byte range.
     // unsigned short 2, 0 - 64 k
     // unsigned int 4, 0 - 4 billion
     // unsigned long 4, 0 - 4 billion
@@ -141,103 +138,10 @@ void main()
 
     // Floating Points: Fractionals (we care about float and double) 4 bytes, 8 bytes.
     // If you need to store fractional values ex: 3.32, use float and double.
-    // They can be very complicated ex: 3.14159. They have a rounding factor for all floating point value.
+    // They can be very complicated ex: 3.15
 
-    // the range such as e+-38,
-    // for a floating digit it's precision is 5 to 7 then errors past there.
-    // Floats are sueful for small numbers
 
-    // Double has a range of e+-^308, but its precision is 12-15. (floating value numbers)
-    // We care more about the precision. Stick to double.
-    // Floating point literals. If you see one, the compiler sees it as a double.
 
-    // bool: Takes a byte, range is false or true. Yes, no value, thats whats its used for. Has the student 
-    // Don't use "int"
 
-    // Char (Care): Represents a single character: takes up only one byte, the range is -128 to 127. ex: a or +
-    // It's an integer type, we don't see it as it, but if you need single character value use "Char"
 
-    // Dates are not primitives in this.
-
-    // Type
-    //  primitives : understood by language
-    // Type     Size (Bytes)    Range
-    // -------------------------------
-    // Signed Intergrals
-    // --
-    // short    2       +-32k (-32768 to 32767)
-    // int      2       +-2 billion (default for whole numbers and literals)
-    // long     4       +-2 billion
-    // Unsigned Integrals (reference purposes only)
-    // --
-    // unsigned short      2           0 to 64k
-    // unsigned int        4           0 to 4 billion
-    // unsigned long       4           0 to 4 billion
-    // Floating point
-    // --
-    // float    4       e+-38,  5-7 precision
-    // double   8       e+-308, 12-15 precision (default for fractional values)
-    // Other
-    // --
-    // bool     1       false, true
-    // char     1       -128 to 127 (single character) (default for char literal)
-
-    int hoursWorked; // hours worked in past week
-    hoursWorked = 25;
-
-    //Store class average on a quiz
-    double classAverage; // or classQuizAverage
-    classAverage = 78.9;
-
-    //Store letter grade for a student
-    char letterGrade;
-    letterGrade = 'A';
-
-    //Store first time in college
-    bool firstTimeInCollege;
-    firstTimeInCollege = true;
-
-    // Assignment
-    //      l-value = r-value
-    length = 50;
-    width = length;
-    // asn_stnt::= E = E;       E = string literals and/or variables
-    // L-value expressions is allowed on the left side, it must be an L-value, the right side must r-value. (l=left, r=right)
-    // r-value: any expression that can be read.
-    // L-value: something I can write
-
-    // Assignment ::= E = E
-    //      l-value = r-value; only variables are l-values
-
-    //Types do not exist at run times, at run time it is a series of bytes, the run time interperts the bytes based o your variable.
-
-    // ex: int level; (level = 65) the system sees 65, if you write 50, then the system sees 50.000 (extra zeros)
-    // Every time you declare a variable 
-
-    // Zero-init variables before use
-    // Can't read vaiable before definitely assigned
-    // Definitely assigned
-    //   Assignment
-    //   std::cin
-    int someVariable;
-    someVariable = 0;
-    //int someVariable; someVariable = 0;
-
-    // Read an int from user
-    std::cin >> someVariable;
-    
-    int anotherValue = 10, anotherValueAgain = 20;
-    
-    // If you don't assign a value, then the compiler will make a error. The language will never allow you.
-    std::cout << someVariable;
-
-    // Don't modify your program when debugging
-
-    //Breakpoint: it tells the debuger to pause and to see what is going on.
-    // Click on the line select the line and F9
-    // To remove it click on the same line F9 it
-
-    // Select on step into (F11) and Step Over (F10)
-    // Red shows that those values changed
-    // If your variables are not right, then your program is wrong. -End of class 2/3
 }
