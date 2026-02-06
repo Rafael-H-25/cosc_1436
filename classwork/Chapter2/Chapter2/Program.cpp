@@ -3,9 +3,20 @@
 * COSC 1436 Spring 2026
 */
 #include <iostream>
-
+#include <string>
 // #include is the first processor plant
 // how it works, when it runs it strips out the line of the file which is "iostream"
+
+// Custom types
+struct Point
+{
+    // Declare the variables that make up the type
+    int x;
+    int y;
+};
+// This is how to declare a type
+// Point type has 2 data points, they are no longer seperate, we can treat them as singular value.
+// 
 
 //Entry point of your progress
 void main()
@@ -105,7 +116,7 @@ void main()
     //int length;
     //int width;
 
-    int length, width; // You are declaring this to the compiler, you are making this easier.
+    int length, width, perimeter; // You are declaring this to the compiler, you are making this easier.
  /*   int perimeter;*/
     // You can also do all of them too. This includes the firstName and lastName.
 
@@ -168,19 +179,22 @@ void main()
     // short    2       +-32k (-32768 to 32767)
     // int      2       +-2 billion (default for whole numbers and literals)
     // long     4       +-2 billion
+    
     // Unsigned Integrals (reference purposes only)
     // --
     // unsigned short      2           0 to 64k
     // unsigned int        4           0 to 4 billion
     // unsigned long       4           0 to 4 billion
+    
     // Floating point
     // --
-    // float    4       e+-38,  5-7 precision
-    // double   8       e+-308, 12-15 precision (default for fractional values)
+    // float    4       e+-38,  5-7 digits after the decimal precision (maximum)      (+- 38 = 10^38 exponent)
+    // double   8       e+-308, 12-15 digits after the decimal precision (default for fractional values)
+    
     // Other
     // --
     // bool     1       false, true
-    // char     1       -128 to 127 (single character) (default for char literal)
+    // char     1       -128 to 127, single character    (default for char literal) (char is said as care)
 
     int hoursWorked; // hours worked in past week
     hoursWorked = 25;
@@ -224,7 +238,7 @@ void main()
     //int someVariable; someVariable = 0;
 
     // Read an int from user
-    std::cin >> someVariable;
+    //std::cin >> someVariable;
     
     int anotherValue = 10, anotherValueAgain = 20;
     
@@ -240,4 +254,134 @@ void main()
     // Select on step into (F11) and Step Over (F10)
     // Red shows that those values changed
     // If your variables are not right, then your program is wrong. -End of class 2/3
+
+    // id ::= (letter|_) {letter|digit|_}*
+    // var_decl ::=    T   id [= E]{, id[= E]};
+    // asn_stnt ::=  E(underscore T) = E(underscore T)
+   
+    // The 5 Arithmetic operators
+
+    // +,-,*,/ (add, subtract, multiply, divide)   4 + 5 = 9, 10 - 3 = 7, (binary operators)
+    // binary operator: has 2 operants
+    // binary_op = E op E
+    // arith_op = + - * / %
+    // Language requires the exact same type. the type of that equation will be T
+    // ex: if the lant operant has an int on the left, the right must be an int.
+
+    // modulus   
+    int quotient = 10 / 3;  // interger division problem: int/int => int
+    // int / int => int (10 / 3 = 3, the 0.3333 is removed.)
+
+
+    // modulus is the remainer when you divide 2 ints (its the only type) only applies to the ints
+    int remainder = 10 % 3; // 1
+
+    // 2 uninary operator: only has a single operan: unary: = + or -
+    int negativeRemainder = -remainder;
+    quotient = +quotient;
+
+    double actualQuotient = 10.0 / 3.0;     // double / double -> double, now we will get the 3.33 value
+
+    // Length, Width, Perimeter
+
+    //Calculate perimeter of rectangle
+    std::cout << "Enter length? ";
+    std::cin >> length;
+
+    std::cout << "Enter width? ";
+    std::cin >> width;
+
+    // P = 2L +2W
+    perimeter = length + length + width + width;
+    std::cout << "Perimeter = " << perimeter << std::endl;
+
+    // Scope: of a variable is effectively its lifetime, its "how long can I use it?", how long is it good for. Are avaliable from declaration until the block that containst it ends.
+    // starts at "{" on its block, any variable defined until it ends until it gets to "}" ends on block that declared it
+    int aLocalVariable = 0; // Declaring a variable here
+    aLocalVariable = 10;
+
+    // Start a new block by using "{ and }"
+    // each block is distict for every outher block
+    {
+        double blockVariableA = 0;
+   
+        // Inside of this block you have all access in this block, you can nest to each block, and you can nest to that block's block
+        // Can access var declared in block + any parent blocks
+        blockVariableA = 10;
+        aLocalVariable = 20; //We can use this in this block, but not VariableA
+
+        double length;
+        length = 80;
+    }
+
+    std::cout << length << std::endl;
+    //blockVariableA is no longer accessible
+    //If you need a variable, keep he scope minimal as possible.
+    //How to manage it, declare it inside the scope of that block shown in line 294 to line 301
+    //Used for more complex code. A child block can redeclare a parent block
+
+    // Dont recommend doing this as it is very confusing right now.
+    // Redeclaring a avariable in a block is strongly not recommended.
+    // Point of declaratio to the point of the block it ended in. { to } - On the quiz
+
+    //- C++ strings: std::string <-- not a keyword,
+    //- It is atype to use but its not a primitive of a language type like others.
+    //- This is only avaliable in C++ (usable in C++) Don't use this in other languages. Really easy to use, acts like a primitive type
+    //- Use = for assignment
+    //- Use + for concatenating 2 string values
+    std::string someStringValue;
+    someStringValue = "Bob";
+    someStringValue = someStringValue + " How are you?"; // We will be using them often. If you use C++, you must always include (#include <string>)
+
+    // Assignment- it is also an expression as well
+    // We can write "x = 5"     5 is an int, and x mush be an int, so the expression is an int.
+    // We can say it as "x = y = 5;"
+    // The value of your expression is whatever the value of the expression. we can chain primary use cases.
+
+    // Value is value of variable after assignment. Everything except the last value is a variable.
+    // Can chain assignment together
+    length = width = perimeter = 0;
+    
+    // Named Constants:
+    // Literals- Constants. I can only read them, has a value and is fixed at a compilled time, its signed type "int", if its float type it's "double", single "char", value is whatever the variable is
+    // It is unmaitainable
+    
+    // Variables- Value and a type, and a variable. Easy to maintain but the program will use them also.
+    // literal: 25 (fixed at compiled times)
+    // Variable :
+    // const_decl ::= const T id = E; 
+    // Casing: Pascal or all uppercase for const. Pascal = all words are capitilized
+    // Must be a compile time constant - must be calculatable at compile time
+    // - Literals
+    // - Simple math expressions with constant expressions
+    //      4+5, MaximumStudents, MaximumStudents - +10
+    const int MAX_SIZE = 25;
+    const int MaximumStudents = 50; // You can change the value if needed at any time
+
+    //Change value at runtime
+    //MaximumStudents = 40; //Dont use variables for constant values
+
+                          
+    int largestNumberOfStudents = 25; //Using the literal
+    //largestNumberOfStudents = maximumStudents; // Using the Variable
+    largestNumberOfStudents = MaximumStudents; // Using the Constant
+    
+    // Named constants: they sit in the middle of literals and variables, gets some of both, good and bad.      (const)
+    // They are fixed at compiled time, they have a value and a type, and a name
+    // Any attempts to write to it will fail. The compiler will fail the call.
+    // Purpose: we wil soon use named constants
+    // A constant in C++ means the value as its fixed at the point of compulation. the literal value remains, the constant goes away
+
+    // Create abd get input for a point
+    // Declare a variable
+    Point left; //Now we can propt the user for the X value
+
+    std::cout << "Enter the X value: ";
+    std::cin >> left.x; 
+    // You need to specify which field value, the dot is the operator, consists of whatever the type is, followed by the expression followed by the type.
+
+    std::cout << "Enter the Y value: ";
+    std::cin >> left.y;
+
+    std::cout << "(" << left.x << ", " << left.y << ")" << std::endl;
 }
