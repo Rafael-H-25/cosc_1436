@@ -384,4 +384,11 @@ void main()
     std::cin >> left.y;
 
     std::cout << "(" << left.x << ", " << left.y << ")" << std::endl;
+
+    // Left literals: Value and type,
+    // Right Variables: Name, value, and type, rewrite
+    // Middle Named Costants: name, value, and type. Read only (things that won't change because of maintainability) const Type and id=E keyword constant
+    // Compilte time constant: literals, simple, named constants. One is value, and one can represent a constant.
+
+    // 
 }
