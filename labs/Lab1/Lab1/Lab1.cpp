@@ -10,11 +10,10 @@
 #include <iomanip>
 
 void main()
-{       // Working good. Don't Edit it.
-    std::string name;
+{       // Working on name
+    std::string firstName, lastName;
     std::cout << "Enter your name: ";
-    std:getline(std::cin, name);
-    std::cout << "Hello " << name << std::endl;
+    std::cin >> firstName, lastName;
 
     // Working Correctly, Don't edit unless needed.
     double labOneGrade, labTwoGrade, labThreeGrade, labFourGrade;       // Part 2
@@ -36,13 +35,22 @@ void main()
     std::cin >> examGradeThree;
 
     // Part 3 works correctly
-    double average;
-    average = (double)(labOneGrade + labTwoGrade + labThreeGrade + labFourGrade) / 4; 
+    double averageLab;
+    averageLab = (double)(labOneGrade + labTwoGrade + labThreeGrade + labFourGrade) / 4; 
 
     std::cout << "Average lab grade = "
         << std::fixed << std::setprecision(2)       // Decimals work, set average as double to fix it
-        << average << std::endl;
+        << averageLab << std::endl;
 
+    // Part 4, Done correctly
+    double averageExam;
+    averageExam = (double)(examGradeOne + examGradeTwo + examGradeThree) / 3;
+    std::cout << "Average exam Grade = "
+        << std::fixed << std::setprecision(2)
+        << averageExam << std::endl;
 
+    // Part 2
+std:getline(std::cin, firstName, lastName);
+    std::cout << "Hello " << firstName, lastName << std::endl; // Work in progress
 }
 
