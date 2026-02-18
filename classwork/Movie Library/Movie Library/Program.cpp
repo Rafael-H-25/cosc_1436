@@ -29,15 +29,88 @@ void main()
 {
     //Basics: define a movie. Name/Title (string), genres (string+), length (timr), actors (string+), directors (string+), release date (date), mpaaratings (string), userrating (double, int) etc. #1. 
     // We ignore Actors and directos, the ratings, time and date we can't use, so adjust definition. Length is minutes (int), dates => release year (int), Isclassic (bool)
+    Movie movie;
+
+    //: Prompt for movie details
+    std::cout << "Enter title (required): ";
+    std::getline(std::cin, movie.title);
+
+    //: Validate title
+    if (movie.title == "")
+        std::cout << "ERROR: Title is required" << std::endl;
+
+    std::cout << "Enter description: ";
+    std::getline(std::cin, movie.description);
+
+    std::cout << "Enter genres: ";
+    std::getline(std::cin, movie.genres);
+
+    std::cout << "Enter run length (in minutes): ";
+    std::cin >> movie.runLength;
+
+    //Runlength >= 0
+    if (movie.runLength < 0)
+    {
+        std::cout << "ERROR: Run length must be at least 0" << std::endl;
+        movie.runLength = 0;
+    }
+
+    std::cout << "Enter release year (1900-2100): ";
+    std::cin >> movie.releaseYear;
+
+    //ReleaseYear >= 1900 and <= 2100
+    if (movie.releaseYear < 1900)
+    {
+        std::cout << "ERROR: Release Year must be al least 1900" << std::endl;
+        movie.releaseYear = 1900;
+    }
+    if (movie.releaseYear > 2100)
+    {
+        std::cout << "ERROR: Release Year must be no more than 2100" << std::endl;
+        movie.releaseYear = 1900;
+    }
+
+    std::cout << "Enter the user rating (1.0-5.0): ";
+    std::cin >> movie.userRating;
+
+    char isClassic;
+    std::cout << "Is classic (Y/N)?: ";
+    std::cin >> isClassic;
+    
+    //If statement
+    //  if_stat ::= if (Eb) S;
+    //Translate to boolean if input is Y then true
+    if (isClassic == 'Y')
+        movie.isClassic = true;
+    if (isClassic == 'y')
+        movie.isClassic = true;
+
+    //Validate classic
+    if (isClassic != 'Y')
+        if (isClassic != 'y')
+            if (isClassic != 'N')
+                if (isClassic != 'n')
+                    std::cout << "ERROR: Must be Y or N" << std::endl;  // != Y, y, N, n
+
+    //Display movie details
+    std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
+    std::cout << "Length (in minutes) " << movie.runLength << std::endl;
+    std::cout << "Genre(s): " << movie.genres << std::endl;
+    std::cout << "User Rating: " << movie.userRating << std::endl;
+    
+    std::string classicIndicator = "No";
+    if (movie.isClassic)
+        classicIndicator = "Yes";
+    std::cout << "Classic? " << classicIndicator << std::endl;
+
+    std::cout << movie.description << std::endl;
 
 
 
-
-
-
-
-
-
+    // If statement: consists if(Eb) Statement; if that boolean expression is true, if false then we do nothing. And ONLY one statement. S = one statement
+    // To do more than one statement: Use block statement {}. blockstmt ::= { S*} Perfectly legal for an if stament to be an if statement (nested "ifs")
+    // Downside: the more it indence, the harder it is to read. And impacts performance.
+    
     // Relational demo
     //// Relational operators (only six of them)
     //// They are binary operators: rel::op= Two boolean expressions and the return type is always a boolean, greater than, less than, greater than equal to, less than equal to, = =, !=
