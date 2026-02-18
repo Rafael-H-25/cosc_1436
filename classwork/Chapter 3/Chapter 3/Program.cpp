@@ -68,7 +68,7 @@ void main()
     // Options-
     //  1 - Change the type of either variable, but we can't really (usually the wrong answer)
     // why: The expectation must be whole numbers for variables when declared to clarify the type you intend to store, not to change the type of the variables to use situations like this.
-    //  2 - Type Casting, when you explicitly change the type of an expression. This is one of the scenarios where, change the type.
+    //  2 - Type Casting, when you explicitly change the type of an expression. This is one of the scenarios where, change the type. When you put it in explicitaly. Doesn't change the ocde beyond that.
     //          A :: C++ cast ::= static_cast<T>(E)
     //          B :: C cast ::= (T) E
     // This cast you wrap this type with the parinthesis followed with the type and then the expression
