@@ -6,6 +6,11 @@
 
 void main()
 {
+    // 20-25 questions
+    // muliple choice (all), questions are randomly ordered.
+    // Black sheet, wort needed but its there, no studio etc.
+    // No trick question, but could have two answers but must pick best answer from both answers.
+
 // Parts of C++
     // Tokens vs Keywords
     // Tokens, examples, and use cases:
@@ -88,6 +93,33 @@ void main()
     // Global Scope, declared outside all funcitions, check the start of this solution.
     // Class and namespace Scope: declared within a class (members or fields), and variable or functions declared inside a namespace block.
     // Ex: namespace Game { int score = 0; }
+
+    
+    
+    
+    
+    
+    // The quiz questions are not focused at syntax, which code block does this and reading code, and academics side.
+
+    // Literals: 10 or a name. Read only, anywhere the value is baked into the source code.
+    // Variables: has a name.
+    // both expressions, and two data points (value and type) lacking a name.
+
+    // Header file, Cmath. 
+    // Getline, and why use: read it in a string, cin when put into 2 values, it always stop at a space. 10_20, Bob_Miller \n.
+    // Type casting: difference. One is C based, other is C++. (type cast and expression), static cast is longer and is guaranteed to fail, C style will alolow anything to anything (more free but your responsible to that).
+    // Variable: needs to be declared and assigned to a value, or just inititialed a value to 0 to not worry about that variable.
+    // Formatting command: setw(#), setfill('') and uses ay character as, fixed forces fixed point notation, setprecision, sets the precision of a decimal point #, if not fixed left and right side, if fixed then after the decimal.
+    // Not percistent is setw.
+    // Left, right, which side the patting goes to. Right is default.
+    // 
+    // Assuming the # is the largest #, short ex: and add a 1, it goes over and goes negative.
+    // OverflowAssuming the # is the largest #, short ex: and add a 1, it goes over and becomes the largest negative #.
+    // Underflow: is the smallest possible and subtract 1 from it and wraps around and becomes the largest #.
+
+// Celling and floor in math fuctions:
+// ceil(x) [x]=: the smallest int >= x
+// floor(x) [x]=: gives the largest int <= x
 
 
 }
