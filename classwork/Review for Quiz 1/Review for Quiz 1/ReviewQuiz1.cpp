@@ -121,5 +121,83 @@ void main()
 // ceil(x) [x]=: the smallest int >= x
 // floor(x) [x]=: gives the largest int <= x
 
+    //Types
+    // -Primitive types, size and range
+    // The most basic data ypes provided by the language.
+    // Integer types(whole numbers): char: 1 byte, -128 to 127, or 0 to 255, short: 2 bytes, -32768 to 32767.
+    // int: 4 bytes, 2 billion (+-), long: 4-8 bytes, same as int or larger, long long:8 bytes +-9x10^18
+    // Floating points: float: 4 bytes- 5-7 decimals precision, double: 8 bytes, 7-12 decimals (the default)
+    // Boolean type: bool: 1 byte, true or false.
+    // Character types: Char: represents a single character "a"
+    // Void type: represetns absence of type, used for functions that don't return a value.
 
-}
+    // Operators: symbols that tell the compiler to preform specific mathematical or logical manipulations.
+    // Assignment: used to store a value in a variable, left must be variable, and right side is the value or expression being stored.
+    // +=, x= x+5, -= x=x-2, *= x=x*3, ect.
+    // Arithmetic Operators: +,-,*,/,% (if using division, on int it discards the remainder, 2.5 => 2, must use float or double.
+    // % only works on integers.
+
+    // Constant: a data item whose value can't be modified once has been set. (read only)
+    //Purpose: prevents accidental changes to crit data, taxRate, allows the compiler to preform optimizations
+    // Tells it as a value that is fixed.
+    // Syntax: to create a constant, you must use const. before or after the data type (const ind/double)
+    // Must be initiallied at the moment of declaration.
+    // Literals, fixed value writtten directly into the code, cant be changed or named. 35, "hello"
+    // Constant, a named memory location with a fixed value, const int limit = 10;, can't be changed.
+    // A named memory location with a chagable value, int score =0;
+
+    // Output: is handled via streams, std::cout, part of <iostream>
+    // Displaying output: sends data to the screen, using <<, and you can chain multiple items together in a single statement.
+    // New line: moves cursor to the next line: \n or std::endl; (a manipulator that inserts a new line and flushes the output buffer.
+    // Formatted Output: controls how #s and text look,
+    // Header file: must include the <iomanip>
+    // Manipulators: setw(n) sets the width of the next output field to n spaces., set precision(n) sets the number of sig figs or decimal places.
+    // Fixed: forces set precision to count digits after the decimal point. cout << fixed << set precision(2);
+    // left/right: aligns text within the width set by setw.
+    // setfill(char) fills empty setw spaces with a specific character ex: -------------
+
+    // Input: handled by the std::cin object which represents the standard input stream.
+    // Getting input: to read data from user into a variable, use the extraction op (>>).
+    // Issues with Reading Multiple Values: has 2 major gotchas: the whitespace problem and mixed types and leftover newline.
+    // Trying to read a full name into a string variable, last name stays behing the input buffer and waits for the next input command.
+    // When entering a number and enter, cin reads the number but leave the \n sitting in the buffer.Ex: cin >> getline(), \n will see that leftover \n.
+    // Reading Strings Using getline(), to read an entire line of text (including spaces) use getline()
+    // EX: getline(cin, variable_name).
+    
+    // Type Casting: the process of converting a value from one data type to another.
+    // Type coercion: the auto conversion by the compiler iwthout the programmer's intervention
+    //      Purpose: to allow operations between diferent types, results in a single, predictable data type.
+    //  does promotion rule: int is moved to highest data type from the two types: int + double = double.
+    // Type hierarchy: highest: double (or long double), long long, long/unsingned long, int/ unsigned int, short, char, bool.
+    // Types of conversion scenarios: 
+    // Promotion: moving from a lower rank to higher rank. no risk of lost data. into to double ex: int x =10, double y = x;
+    // Demotion: higher to lower, with risk of data loss. double pi = 3.14, int x = pi;.
+    // Explicit Type Casting (done mannual): forcing a conversion that the compiler won't do automatically.
+    // C-style: (int)myDouble, C++: static_cast<int>(myDouble)  <= safer to use.
+    // C-style: from C language. powerful but uses brute force (target_type)expression. ex: double pi = 3.1243, int truncatedPi = (int)pi
+    // Short and easy to use but high risk.
+    // Static_cast: C++ version to a safer visible way to handle conversions and is check by the compiler at compiler time.
+    // static_cast<target_type>(expression): int total =100, int count = 8, double average = static_cast<double>(total) / count.
+    // Static better/safer.
+
+    // Operators:
+    // Operator Precedence: rank, similar to pemdas, Postfix/scope (::, ++, --, (), []), Unary (!,+,-,++,--), Multiplicative (*,/,%)
+    // Additive (+-), Relational (<, >, <=, >=), Equality (==, !=), and assignment (=, +=, -=, etc).
+    // Associativity (tie breaker):if two operators have the same precedence, the associativity tells the compiler which way to read.
+    // Ex: L-to-R, most opertators (+,-,*,/). R-to-L, assingment and unary operators: x=y=10 => x= (y=10) 
+    // Overflow: when trying to store a value outside a data type's capacity, greater than max value, goes to lowest number.
+    // Underflow: is opposite.
+
+    // Math functions: advanced mathematical ops. beyond basic arithmetic (square roots, rounding, or absolute)
+    // Header File: must include <cmath>
+    // Common Math Functioms: most frequently used functions for manipulating #s. All typically take a double or float as an argument and return a double or float.
+    // abs(x) Absolute Value.
+    // round(x) standard rounding: round to nearest integer. If its 2.5 or 0.5, then rounds to the 2 or 0.
+    // ceil(x) ceiling rounds up to the next whole integer, from 3.1 to 3.9 regardless.
+    // floor(x): rounds down to previous whole integer. opposite of ceil.
+    // Other Essential Functions: 
+    // pow(base, exp) raises to an exponent (pow(2,3)=8.0, 
+    // sqrt(x) calc the square root, qrt(25) => 5.0
+    // max(a,b) returns the larger of two values, max(10,20) => 20
+    // min(a,b) opposite of max(a,b)
+ }
