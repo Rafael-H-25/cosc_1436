@@ -44,21 +44,70 @@ void main()
     std::cin >> choice;
 
     // Handle menu choice
-    if (choice == 'A' || choice == 'a')
-        // TODO: Move addmovie logic here
-        std::cout << "Add not implemented" << std::endl;
-    else if (choice == 'E' || choice == 'e')
-        std::cout << "Edit not implemented" << std::endl;           //else if from a, e. d. v, will not show.
-    else if (choice == 'D' || choice == 'd')
-        std::cout << "Delete not implemented" << std::endl;
-    else if (choice == 'V' || choice == 'v')
-        std::cout << "View not implemented" << std::endl;
-    else 
+    //if (choice == 'A' || choice == 'a')
+    //    // TODO: Move addmovie logic here
+    //    std::cout << "Add not implemented" << std::endl;
+    //else if (choice == 'E' || choice == 'e')
+    //    std::cout << "Edit not implemented" << std::endl;           //else if from a, e. d. v, will not show. 
+    //else if (choice == 'D' || choice == 'd')
+    //    std::cout << "Delete not implemented" << std::endl;         
+    //else if (choice == 'V' || choice == 'v')
+    //    std::cout << "View not implemented" << std::endl;
+    //else 
         /*if (choice != 'A' && choice != 'a'
         && choice != 'E' && choice != 'e'           <= This makes no sense as all are either true or false, everything else won't show. So we remove it.
         && choice != 'D' && choice != 'd'
         && choice != 'V' && choice != 'v')*/
-        std::cout << "ERROR: Invalid option" << std::endl;
+        //std::cout << "ERROR: Invalid option" << std::endl;       
+    // switch_statement ::= switch (E) { case_statement* } ;
+    // The restrictions: the replacement for (E must equal to Value)
+    // Limitations: 1, swtich expression must be an integral or char. Cant use floating point values or string.
+    // 2: All case labels must be compile time constants integers (Value doesn't change, and compiler knows it) integer literals, named constants that are literals. No floats or string or any other.
+    // 3: case labels must be unique. Within a switch statement must only appear once. Can't have duplicates and won't know where to jump to. No way to work around it.
+    // To prevent fallthrough frim one case to the next, end your case statements will break.
+    // The only reason why we can have a fall through, a case can be optional.
+
+    switch (choice)
+    {
+        // TODO: Move addmovie logic here
+        case 'A':
+        //{
+        //    //choice = 'a'
+        //    //std::cout << "Hello";
+        //    std::cout << "Add not implemented" << std::endl;
+        //    break;
+        //}
+        case 'a': std::cout << "Add not implemented" << std::endl; break;     // Easy to read, and maintainability. The restrictions:
+
+        case 'E': /*std::cout << "Eddit not implemented" << std::endl; break;  */    // How to prevent fall through including the default. You need to use {} also, but it sometimes can be avoided like this.
+        case 'e': std::cout << "Eddit not implemented" << std::endl; break;     // if needed another statement plus the break then use the block {}
+        
+        case 'D': /*std::cout << "Delete not implemented" << std::endl; break;*/
+        case 'd': std::cout << "Delete not implemented" << std::endl; break;
+        
+        case 'V': /*std::cout << "View not implemented" << std::endl; break;*/
+        case 'v': std::cout << "View not implemented" << std::endl; break;
+
+        //Everything else, that execute if that value from the switch expression from everything else.
+        default: std::cout << "ERROR: Invalid option" << std::endl; break;
+
+        //    if (choice == 'A' || choice == 'a')
+        //    // TODO: Move addmovie logic here
+        //    std::cout << "Add not implemented" << std::endl;
+        //else if (choice == 'E' || choice == 'e')
+        //    std::cout << "Edit not implemented" << std::endl;           //else if from a, e. d. v, will not show. 
+        //else if (choice == 'D' || choice == 'd')
+        //    std::cout << "Delete not implemented" << std::endl;
+        //else if (choice == 'V' || choice == 'v')
+        //    std::cout << "View not implemented" << std::endl;
+        /*else
+            std::cout << "ERROR: Invalid option" << std::endl;*/
+    }
+    // Were designed if if else is true only.For this, it will take an t time for your input be chosen ex: e
+    // The more you do if,else, the slower will run.
+    // Use switch, switch(E) { case Label1 : Statement;, case Label2 : Statement;, ... } It evaluates the expression then umps to the case statement which matches to the case value.
+    // It only needs to evaluate the assignment and then jumps to that exact case that value matches too only once. Once found it executes that statement.
+      
 
     // Logical operators
     //  log_expr ::= Eb log_op Eb
@@ -166,10 +215,27 @@ void main()
     std::cout << "Genre(s): " << movie.genres << std::endl;
     std::cout << "User Rating: " << movie.userRating << std::endl;
     
-    std::string classicIndicator = "No";
-    if (movie.isClassic)
-        classicIndicator = "Yes";
-    std::cout << "Classic? " << classicIndicator << std::endl;
+    // Conditional Operator
+    // if (Eb), E = Vt, else E = Vf, Eb ? Vt : Vf
+    // Replaces if-else when calculating a value, must understand what it is for future exams.
+    // 
+    //std::string classicIndicator = "No";
+    //if (movie.isClassic)
+    //    classicIndicator = "Yes";
+    //std::string classicIndicator = movie.isClassic ? "Yes": "No";       // We're writing how we like it, compiler figures it out on its own. 
+                                                                        //  Easy way to remove/not need if statements, for determining one or two possible values only.
+    //std::cout << "Classic? " << classicIndicator << std::endl;  
+           
+    // First issue: Both Vf and Vt must be the same type, the type of conditional is the type of value is returning.
+    // Here this is string. The compiler must determine which type is it at the same time at runtime. Type coersion won't work, so you could use typecast if necessary/possible.
+    // 2nd: The compiler can't tell the expression if its a different expression, it won't bother guessing, and won't pick, to fix this then make it around a parenthesis.
+    // Ex:
+    std::cout << "Classic? " << (movie.isClassic ? "Yes" : "No") << std::endl;
+    
+    // if (movie.isClassic)
+     //   std::cout << "Classic? " << "Yes" << std::endl;         // doable but not maintainable.
+    //else
+      //  std::cout << "Classic? " << "No" << std::endl;          // if (Eb), E = Vt, else E = Vf, Eb ? Vt : Vf (conditional operator) Anytime we need an expression for 2 other values we can use that.
 
     std::cout << movie.description << std::endl;
 
