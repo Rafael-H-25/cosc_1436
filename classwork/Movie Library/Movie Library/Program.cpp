@@ -16,20 +16,93 @@ struct Movie
 
     std::string genres; // comma seperated list
 
-    int runLength;      // >=0
-    int releaseYear;    // 1900 to 2100
+    int runLength = 0;      // >=0
+    int releaseYear = 0;    // 1900 to 2100
 
-    double userRating;  //1 to 5
+    double userRating = 0;  //1 to 5
 
-    bool isClassic;
+    bool isClassic = false;
 
     std::string description; //Optional (summary)
 };
 
+ /* Enumeration: a subrange of int:
+    *
+    *
+    */
+enum MENU_COMMAND   //C style enum, not very good for us. The problem comes in when you have another enum. So we can use the abreviations for them (MC). They are very restricitve.
+{
+    // Defines the value that represent the subset of integers 
+    //Emum values: rather than reading a character calling it a choice, now were going to declare a variable command as input.
+    MC_ADD = 1,        // const int ADD = 0, named integer constants used for integers
+    MC_EDIT = 2,       // = 1 etc. generally not useful, you sometimes care for the numerical value
+    MC_DELETE = 3,     // do not represent one of them as 0. Consider it as undefined.
+    MC_VIEW = 4,
+    MC_QUIT = 5
+};
+
+enum ENHANCED_MENU_COMMAND  // Enum values are considered the whole scope, they are rewritten as named constants globally. They must be globally unique can't be the same anywhere.
+{
+    EMC_INSERT,
+    EMC_DELETE
+
+};
+// C++ style enum, cout doesn't suppport it so use a cast
+enum class MenuCommand // You will still need to the same thing as before.
+{
+    Add = 1,
+    Edit = 2,
+    Delete = 3,
+    View = 4,
+    Quit = 5
+};
+
+enum class EnhancedMenuCommand
+{
+    Insert,     // Its scope is from the blocks {}
+    Delete
+};
+
 void main()
 {
+    /* Demo  (Heavily used, you must know this)            SYNTAX
+    * 4 operators:           x += 1, x -= 1     x'        Expression
+    * Prefix increment:      ++x X + 1          x+1         x' (current new value) always get the new value
+    * Postfix intrement:     x++                x+1         temp = x (value before its modifed) alwayas get the prevalue
+    * Prefix decremint:      --x x - 1          x-1         x'
+    * Postfix decrement:     x--                x-1         
+    */ 
+
+    //Side effect: is the consequences of evaluating an expression. 
+   // int someValue = 20;
+   // //++someValue;    // prefix increments someValue by 1 and stores it back into someValue (someValue += 1)
+   // std::cout << ++someValue << " " << someValue << std::endl; // 21 21
+
+   //// someValue++;    // postfix inc.
+   ////std::cout << someValue << std::endl;
+   // std::cout << someValue++ << " " << someValue << std::endl; // 21 22
+
+   // //--someValue;    // prefix dec
+   // //std::cout << someValue << std::endl;
+   // std::cout << --someValue << " " << someValue << std::endl; // 21 21
+
+   // //someValue--;    // postfix dec
+   // //std::cout << someValue << std::endl;
+   // std::cout << someValue-- << " " << someValue << std::endl; // 21 20
+
+   // someValue = 20;
+   // std::cout << someValue++ << " " << ++someValue << " " << someValue << std::endl;
+
+   // someValue = 20; // short circuit value
+   // if (++someValue > 30 || someValue-- < 10)   // We won't see the right if the left would be true because left side was true and short circuited it to be true and "skip it"
+   //     std::cout << "Is true: ";
+   // std::cout << someValue << std::endl;
+
+
     //Basics: define a movie. Name/Title (string), genres (string+), length (timr), actors (string+), directors (string+), release date (date), mpaaratings (string), userrating (double, int) etc. #1. 
     // We ignore Actors and directos, the ratings, time and date we can't use, so adjust definition. Length is minutes (int), dates => release year (int), Isclassic (bool)
+
+    // The while loop (easiest)
 
     // Display menu (simple)
     std::cout << "Main Menu" << std::endl;
@@ -38,10 +111,41 @@ void main()
     std::cout << "E)dit Movie" << std::endl;
     std::cout << "D)elete Movie" << std::endl;
     std::cout << "V)iew Movie" << std::endl;
+    std::cout << "Q)uit" << std::endl;
     std::cout << "?";
 
-    char choice;
-    std::cin >> choice;
+    //Handle user input
+    //MENU_COMMAND input = (MENU_COMMAND)0; // Only do this if you have to program against, but we won't do this in class, static cast works, any interger value can be assigned an enum.
+    MenuCommand input = (MenuCommand)0;
+    char choice;    // Enum allows to make named to prefined values, but gives a false sense of security.
+
+
+    // while loop,   syntax: while (Expression boolean, then executes statement) a pretest, testing the condition before doing the work. executes 0 or more times.
+    // Used alot
+    while (input == (MenuCommand)0)
+    {
+        std::cin >> choice;
+        switch (choice)
+        {
+            case 'A':
+            case 'a': input = MenuCommand::Add; break;
+
+            case 'E':
+            case 'e': input = MenuCommand::Edit; break;
+
+            case 'V':
+            case 'v': input = MenuCommand::View; break;
+
+            case 'D':
+            case 'd': input = MenuCommand::Delete; break;
+
+            case 'Q':
+            case 'q': input = MenuCommand::Quit; break;
+
+            default: std::cout << "ERROR: Invalid option" << std::endl; break;
+        }
+    }
+    
 
     // Handle menu choice
     //if (choice == 'A' || choice == 'a')
@@ -66,28 +170,34 @@ void main()
     // 3: case labels must be unique. Within a switch statement must only appear once. Can't have duplicates and won't know where to jump to. No way to work around it.
     // To prevent fallthrough frim one case to the next, end your case statements will break.
     // The only reason why we can have a fall through, a case can be optional.
+    
+    //MENU_COMMAND input; // It comes to play is when we star using it with characters or full range on values.
+    //input = ADD;
+    //std::cin >> (int)input; // (C) Cin doesn't know what that means, can't work with it sadly. But we can put an int. Cout should work just fine, cin cant understand user input for this.
+    //std::cout << (int)input; // (C++) cout doesnt know
 
-    switch (choice)
+    switch (input)
     {
-        // TODO: Move addmovie logic here
-        case 'A':
-        //{
-        //    //choice = 'a'
-        //    //std::cout << "Hello";
-        //    std::cout << "Add not implemented" << std::endl;
-        //    break;
-        //}
-        case 'a': std::cout << "Add not implemented" << std::endl; break;     // Easy to read, and maintainability. The restrictions:
+        //// TODO: Move add movie logic here
+        //case 'A':
+        ////{
+        ////    //choice = 'a'
+        ////    //std::cout << "Hello";
+        ////    std::cout << "Add not implemented" << std::endl;
+        ////    break;
+        ////}
+        case MenuCommand::Add: std::cout << "Add not implemented" << std::endl; break;     // Easy to read, and maintainability. The restrictions:
 
-        case 'E': /*std::cout << "Eddit not implemented" << std::endl; break;  */    // How to prevent fall through including the default. You need to use {} also, but it sometimes can be avoided like this.
-        case 'e': std::cout << "Eddit not implemented" << std::endl; break;     // if needed another statement plus the break then use the block {}
+        //case 'E': /*std::cout << "Eddit not implemented" << std::endl; break;  */    // How to prevent fall through including the default. You need to use {} also, but it sometimes can be avoided like this.
+        case MenuCommand::Edit: std::cout << "Edit not implemented" << std::endl; break;     // if needed another statement plus the break then use the block {}
         
-        case 'D': /*std::cout << "Delete not implemented" << std::endl; break;*/
-        case 'd': std::cout << "Delete not implemented" << std::endl; break;
+        //case 'D': /*std::cout << "Delete not implemented" << std::endl; break;*/
+        case MenuCommand::Delete: std::cout << "Delete not implemented" << std::endl; break;
         
-        case 'V': /*std::cout << "View not implemented" << std::endl; break;*/
-        case 'v': std::cout << "View not implemented" << std::endl; break;
-
+        //case 'V': /*std::cout << "View not implemented" << std::endl; break;*/
+        case MenuCommand::View: std::cout << "View not implemented" << std::endl; break;
+       
+        case MenuCommand::Quit: std::cout << "Quit not implemented" << std::endl; break;
         //Everything else, that execute if that value from the switch expression from everything else.
         default: std::cout << "ERROR: Invalid option" << std::endl; break;
 
@@ -127,11 +237,15 @@ void main()
 
     //: Prompt for movie details
     std::cout << "Enter title (required): ";
-    std::getline(std::cin, movie.title);
+
+    while (movie.title == "")
+    {
+        std::getline(std::cin, movie.title);
 
     //: Validate title
-    if (movie.title == "")
-        std::cout << "ERROR: Title is required" << std::endl;
+        if (movie.title == "")
+            std::cout << "ERROR: Title is required" << std::endl;
+    }
 
     std::cout << "Enter description: ";
     std::getline(std::cin, movie.description);
@@ -140,13 +254,18 @@ void main()
     std::getline(std::cin, movie.genres);
 
     std::cout << "Enter run length (in minutes): ";
-    std::cin >> movie.runLength;
-
-    //Runlength >= 0
-    if (movie.runLength < 0)
+    movie.runLength = -1;   
+    while (movie.runLength < 0) // must ensure this scenario or any scenario must garantee that it is false or will be flase or it will be an infinite loop.
     {
-        std::cout << "ERROR: Run length must be at least 0" << std::endl;
-        movie.runLength = 0;
+        std::cin >> movie.runLength;
+
+
+        //Runlength >= 0
+        if (movie.runLength < 0)
+        {
+            std::cout << "ERROR: Run length must be at least 0" << std::endl;
+            //movie.runLength = 0;
+        }
     }
 
     std::cout << "Enter release year (1900-2100): ";
