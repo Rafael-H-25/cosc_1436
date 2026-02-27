@@ -15,8 +15,8 @@ void main()
     std::cout << "Enter your name: ";
     std::getline(std::cin, fullName);
 
-    // Working Correctly, Don't edit unless needed.
-    double labOneGrade, labTwoGrade, labThreeGrade, labFourGrade;       // Part 2
+    // Enter inputs for your grades
+    double labOneGrade, labTwoGrade, labThreeGrade, labFourGrade;
     std::cout << "Enter your lab 1 grade: ";
     std::cin >> labOneGrade;
     std::cout << "Enter your lab 2 grade: ";
@@ -40,42 +40,41 @@ void main()
     std::cout << "Enter your final exam grade: ";
     std::cin >> finalExam;
 
-    // Part 3 works correctly, Dont mess with it.
+    // Story 3 and 4 averages
     double averageLab;
     averageLab = (double)(labOneGrade + labTwoGrade + labThreeGrade + labFourGrade) / 4; 
 
-    // Part 4, Done correctly, don't mess with it.
     double averageExam;
     averageExam = (double)(examGradeOne + examGradeTwo + examGradeThree) / 3;
     std::cout << "\n" << std::endl;
 
-    // Part 3, Completed don't edit
-    std::cout << fullName << "," << " your lab grades are:" << std::endl;   //Works correctly.
+    // Labs grade and average
+    std::cout << fullName << "," << " your lab grades are:" << std::endl;
     std::cout << "Lab 1 grade = " << labOneGrade << std::endl;
     std::cout << "Lab 2 grade = " << labTwoGrade << std::endl;
     std::cout << "Lab 3 grade = " << labThreeGrade << std::endl;
     std::cout << "Lab 4 grade = " << labFourGrade << std::endl;
-    std::cout << "The average lab grade = " // Decimals work, set average as double to fix it
+    std::cout << "The average lab grade = "
         << averageLab << std::endl;
     std::cout << "\n" << std::endl;
     
-    // Part 4, Completed don't edit
+    // Exam Grade
     std::cout << fullName << "," << " your exam grades are:" << std::endl;
     std::cout << "Exam 1 grade = " << examGradeOne << std::endl;
     std::cout << "Exam 2 grade = " << examGradeTwo << std::endl;
     std::cout << "Exam 3 grade = " << examGradeThree << std::endl;
     std::cout << "The average exam grade = "
         << averageExam << std::endl;
-    std::cout << "\n" << std::endl; // Space line
+    std::cout << "\n" << std::endl;
 
-    //Part 6, the participation and final exam
-    std::cout << fullName << "," << "your other grades are: " << std::endl;
+    // Final exam and other grades
+    std::cout << fullName << "," << " your other grades are: " << std::endl;
     std::cout << "Participation = " << participation << std::endl;
     std::cout << "Final exam = " << finalExam << std::endl;
     std::cout << "\n" << std::endl;
 
-    //Part 5, Completed, but feels incorrect.
-    double classAverage = (averageLab * 0.65) + (averageExam * 0.20) + (participation * 0.05) + (finalExam * 0.10); // Testing done, but feels wrong, ask professor.
+    // Your class average
+    double classAverage = (averageLab * 0.65) + (averageExam * 0.20) + (participation * 0.05) + (finalExam * 0.10);
     
     std::cout << fullName << "," << " your class grade is: " << std::endl;
     std::cout << "Average lab grade (65%) is: "
