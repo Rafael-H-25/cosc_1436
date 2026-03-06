@@ -103,6 +103,37 @@ void main()
     // We ignore Actors and directos, the ratings, time and date we can't use, so adjust definition. Length is minutes (int), dates => release year (int), Isclassic (bool)
  
     // The while loop (easiest)
+    
+    // Demo nested loops
+    int someValue = 10;
+    for (int x = 0; x < 50; ++x) // always start at 0. How we do it. this loop will do 50 iterations.
+    {
+        for (int y = 0; y < 20; ++y) // 20 * 50 = 1000, will be every long. Blows up when uing nested loops like this, and will slow the program down.
+        {
+            std::cout << x + y << std::endl;
+
+            if (y != 0 && y % 10 == 0)
+                break;
+        }
+
+        if (x != 0 && x % 10 == 0)
+        {
+            std::cout << "Quit? ";
+            int choice;
+            std::cin >> choice;
+            if (choice != 0)
+                break;
+        }
+    
+    }
+    
+    /*              prehost     S
+    * while         pre         0+      if neither
+    * for           pre         0+      fixed iterations
+    * do while      post        1+      at least once       "Quiz which should you use for post test". Quiz over this. 
+    */
+    
+    
     Movie movie;
     
     bool quit = false;
@@ -224,12 +255,19 @@ void main()
 
                 //int genreCount = 0;
                 //while (genreCount < 5)
-
+                // Break and continue: Useable inside of a loop. Purpose
+                // Break: getting out of the case. Used when want out of the loop (stops the loop) use when needed or not precive any further. Begining of a loop or end. Use 2 or only 1.
+                // Continue statement: purpose to exit the current iteration of that loop. (it is skipped to the next part.)
+                
 //                int count = 0;
                 for (int count = 0; count < 5; ++count) // Commonly used case.
                 {
                     std::string genre;
                     std::getline(std::cin, genre);
+
+                    //if (genre == "")
+                    //    continue;   // still going to execute but won't enter anything with empty space. still adds up to the "5"
+                    //movie.genres += ", " + genre;
 
                     if (genre != "")
                     {
@@ -237,13 +275,17 @@ void main()
                        //++genreCount;
                     } else
                         //genreCount = 5;
-                        count = 5;
+                        //count = 5;
+                        break;
                 }
                
 
                 std::cout << "Enter run length (in minutes): ";
-                movie.runLength = -1;
-                while (movie.runLength < 0) // must ensure this scenario or any scenario must garantee that it is false or will be flase or it will be an infinite loop.
+                // do-while: do statement while (Eb),
+                //      post-test S executes at least once
+              /* movie.runLength = -1;
+                while (movie.runLength < 0)*/ // must ensure this scenario or any scenario must guarantee that it is false or will be false or it will be an infinite loop.
+                do
                 {
                     std::cin >> movie.runLength;
 
@@ -254,7 +296,7 @@ void main()
                         std::cout << "ERROR: Run length must be at least 0" << std::endl;
                         //movie.runLength = 0;
                     }
-                }
+                } while (movie.runLength < 0);
 
                 std::cout << "Enter release year (1900-2100): ";
                 /*std::cin >> movie.releaseYear;*/
@@ -303,34 +345,73 @@ void main()
                 //Translate to boolean if input is Y then true
                 //movie.isClassic = isClassic == 'Y' || isClassic == 'y'; // <= removes the need of an "if"
 
-                bool done = false; // declare it before a loop
-                while (!done)
+                //bool done = false; // declare it before a loop
+                //while (!done)
+                do
                 {
                     std::cin >> isClassic;
 
                     if (isClassic == 'Y' || isClassic == 'y')               // <= This removes excess code from 'y'.
                     {
                         movie.isClassic = true;
-                        done = true;
+                        //done = true;
+                        break;
                     } else if (isClassic == 'N' || isClassic == 'n')
                     {
                         movie.isClassic = false;
-                        done = true;
+                        //done = true;
+                        break;
                     } else
                         std::cout << "ERROR: Must be Y or N" << std::endl;  // != Y, y, N, n        // We are goig to expand by using a different statement. (if_state ::= if (Eb), St, [else S(f);]
 
-                }
+                } while (true);
+
                 break;
             }
             //case 'E': /*std::cout << "Eddit not implemented" << std::endl; break;  */    // How to prevent fall through including the default. You need to use {} also, but it sometimes can be avoided like this.
             case MenuCommand::Edit: std::cout << "Edit not implemented" << std::endl; break;     // if needed another statement plus the break then use the block {}
 
             //case 'D': /*std::cout << "Delete not implemented" << std::endl; break;*/
-            case MenuCommand::Delete: std::cout << "Delete not implemented" << std::endl; break;
+            case MenuCommand::Delete: //std::cout << "Delete not implemented" << std::endl; break;
+            {
+                if (movie.title == "")
+                    break;
+
+                // Confirm
+                std::cout << "Are you sure you want to detele '" << movie.title << "' (Y/N)? ";
+
+                bool confirm = false;
+                do
+                {
+                    char choice;
+                    std::cin >> choice;
+                    if (choice == 'Y' || choice == 'y')
+                    {
+                        confirm = true;
+                        break;
+                    } else if (choice == 'N' || choice == 'n')
+                    {
+                        confirm = false;
+                        break;
+                    }
+                } while (true);
+
+             // Delete
+                if (confirm)
+                movie.title = "";
+                break;
+            }
+
 
             //case 'V': /*std::cout << "View not implemented" << std::endl; break;*/
             case MenuCommand::View:
             {
+                if (movie.title == "")
+                {
+                    std::cout << "No movies in library" << std::endl;
+                    break;
+                }
+
             //Display movie details
                 std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
                 std::cout << "Length (in minutes) " << movie.runLength << std::endl;
