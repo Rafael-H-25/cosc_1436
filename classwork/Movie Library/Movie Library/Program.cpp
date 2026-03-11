@@ -48,6 +48,7 @@ enum ENHANCED_MENU_COMMAND  // Enum values are considered the whole scope, they 
 
 };
 // C++ style enum, cout doesn't suppport it so use a cast
+
 enum class MenuCommand // You will still need to the same thing as before.
 {
     Add = 1,
@@ -62,6 +63,70 @@ enum class EnhancedMenuCommand
     Insert,     // Its scope is from the blocks {}
     Delete
 };
+
+    //Function: a reusable block of code that does 1 logical thing.
+    // Must sit outside of main.
+    // An error message, may require 1-2 lines of code that may require its own function
+    // Example: getline (a fuction/module: reads a string from an input.)
+    // std::cin: (module) not technically a function but the input string option is.
+    // std::cout: the functionality of it converting text in a input.
+    // pow() exp(), many are out there. (modulus)
+    // Very critical to identify when to find a function and build one.
+    // Have several benefits:
+    /*  1. Maintanability: when programs are getting more complicated, the harder it is to maintain, by using fuctions it reduces it.
+    *   2. Smaller: reduces how much code is needed to operate. ex: case function from add movie function.
+    *   3. encapsulation: its a black box, you should not care. The program does their job and you trust on that. If it doesn't work is because its not in your work. ex: cout and cin.
+    *   4. Changes: isolate changes from how fuctions are implemented from us. ex: pow may mean something else from an x time before vs a y time after, the code doesn't care at all from that.
+    *   5. Isolated: The code in a function is isolated from any other code. No visibility in them and will have no chance to mess other functions in them.
+    *   One benifit it doesn't provide: Speed: Slows down your code down, however with modern processors you won't really tell. Keep that in mind.
+    */
+
+// Function to display a horizontal line ex:
+/* Starts with function definition::= void id(), statement in void
+* {
+* statement
+* } and a ";"
+* func_defn ::= T id () { S* }
+* casing for fuctions: camel or Pascal , write them as Capital letter or Pascal casing and must be consistent if use functions. ex: Pascal for all functions must be consistent.
+*/
+// Function definition here below. a function represents: "does something", name the function a verb/action and use standard identifiers also.
+// How to document a document below, a high requirement when intering the "(" must be correct based on the function's intension.
+// Briefs is the single sentence description of code. Major requirement to describe a function in one simple sentence. 
+
+
+/// @brief Displays a horizontal line.
+void DisplayLine() /* The function name determines the function action*/
+{
+    // Logical operation any # of code you want.
+    std::cout << "-----------------" << std::endl;
+};
+
+//Function to reset color
+/// @brief Resets the output colors to their default values.
+void ResetColors()
+{
+    std::cout << "\033[0m";
+};
+
+/// @brief Clears the input buffer of extra characters
+void ClearInputBuffer()
+{
+    std::cin.ignore(INT32_MAX, '\n');    // Has 2 arguements. 
+};
+
+// Function to set text color to red
+/// @brief Sets the output color for displaying errors.
+void SetErrorColor()
+{
+    std::cout << "\033[91m";
+};
+// Above are simple functions.
+
+// Main is a special function
+// it is the entry fuction o your program
+// it's declaration can vary slightly
+// You can't call main directly
+// Functions are compiled at isolation but it works like a variable with an expression because of C.
 
 void main()
 {
@@ -102,38 +167,37 @@ void main()
     //Basics: define a movie. Name/Title (string), genres (string+), length (timr), actors (string+), directors (string+), release date (date), mpaaratings (string), userrating (double, int) etc. #1. 
     // We ignore Actors and directos, the ratings, time and date we can't use, so adjust definition. Length is minutes (int), dates => release year (int), Isclassic (bool)
  
-    // The while loop (easiest)
-    
-    // Demo nested loops
-    int someValue = 10;
-    for (int x = 0; x < 50; ++x) // always start at 0. How we do it. this loop will do 50 iterations.
-    {
-        for (int y = 0; y < 20; ++y) // 20 * 50 = 1000, will be every long. Blows up when uing nested loops like this, and will slow the program down.
-        {
-            std::cout << x + y << std::endl;
+    //// The while loop (easiest)
+    //
+    //// Demo nested loops
+    //int someValue = 10;
+    //for (int x = 0; x < 50; ++x) // always start at 0. How we do it. this loop will do 50 iterations.
+    //{
+    //    for (int y = 0; y < 20; ++y) // 20 * 50 = 1000, will be every long. Blows up when uing nested loops like this, and will slow the program down.
+    //    {
+    //        std::cout << x + y << std::endl;
 
-            if (y != 0 && y % 10 == 0)
-                break;
-        }
+    //        if (y != 0 && y % 10 == 0)
+    //            break;
+    //    }
 
-        if (x != 0 && x % 10 == 0)
-        {
-            std::cout << "Quit? ";
-            int choice;
-            std::cin >> choice;
-            if (choice != 0)
-                break;
-        }
-    
-    }
+    //    if (x != 0 && x % 10 == 0)
+    //    {
+    //        std::cout << "Quit? ";
+    //        int choice;
+    //        std::cin >> choice;
+    //        if (choice != 0)
+    //            break;
+    //    }
+    //
+    //}
     
     /*              prehost     S
     * while         pre         0+      if neither
     * for           pre         0+      fixed iterations
     * do while      post        1+      at least once       "Quiz which should you use for post test". Quiz over this. 
     */
-    
-    
+   
     Movie movie;
     
     bool quit = false;
@@ -141,7 +205,8 @@ void main()
     {
     // Display menu (simple)
         std::cout << "Main Menu" << std::endl;
-        std::cout << "------------" << std::endl;
+        //std::cout << "------------" << std::endl;
+        DisplayLine(  // We declared a function, and made a code smaller
         std::cout << "A)dd Movie" << std::endl;
         std::cout << "E)dit Movie" << std::endl;
         std::cout << "D)elete Movie" << std::endl;
@@ -177,7 +242,13 @@ void main()
                 case 'Q':
                 case 'q': input = MenuCommand::Quit; break;
 
-                default: std::cout << "ERROR: Invalid option" << std::endl; break;
+                default:
+                { 
+                    SetErrorColor();
+                    std::cout << "ERROR: Invalid option" << std::endl;
+                    ResetColors();
+                    break; 
+                }
             }
         }
 
@@ -227,7 +298,8 @@ void main()
                 // Add movie logic          // block declarations: c style type: , the alternantive approach is the inline delaration: //code int x = E; //code double y = E (declare it when needed and is most prefered)   
                
                 // Reset input buffer
-                std::cin.ignore(INT32_MAX, '\n');
+                //std::cin.ignore(INT32_MAX, '\n');
+                ClearInputBuffer();
 
                 //: Prompt for movie details
                 std::cout << "Enter title (required): ";
@@ -463,8 +535,6 @@ void main()
         // The more you do if,else, the slower will run.
         // Use switch, switch(E) { case Label1 : Statement;, case Label2 : Statement;, ... } It evaluates the expression then umps to the case statement which matches to the case value.
         // It only needs to evaluate the assignment and then jumps to that exact case that value matches too only once. Once found it executes that statement.
-
-
         // Logical operators
         //  log_expr ::= Eb log_op Eb
         //              | ! Eb
@@ -475,12 +545,8 @@ void main()
         // !cond1                                               F       T       (F)     (T)
                                             //                  T       F       (F)     (T)     (F)
                                             //                  T       T       (T)     (T)
-
-        
-
             //if (isClassic == 'y')                                                         
         //    movie.isClassic = true;                   
-
         //Validate classic
         /*if (isClassic != 'Y')
             if (isClassic != 'y')
@@ -488,11 +554,6 @@ void main()
                     if (isClassic != 'n')*/
         //if (isClassic != 'Y' && isClassic != 'y' && isClassic != 'N' && isClassic != 'n') //Simplified the code, but must need a boolean expression.
                         //std::cout << "ERROR: Must be Y or N" << std::endl;  // != Y, y, N, n
-
-        
-
-
-
         // If statement: consists if(Eb) Statement; if that boolean expression is true, if false then we do nothing. And ONLY one statement. S = one statement
         // To do more than one statement: Use block statement {}. blockstmt ::= { S*} Perfectly legal for an if stament to be an if statement (nested "ifs")
         // Downside: the more it indence, the harder it is to read. And impacts performance.
@@ -553,5 +614,4 @@ void main()
         //// Use .c_str() to convert C++ string to C
         //isSingularName = _strcmpi(firstName.c_str(), lastName.c_str()) == 0; // Not equal != 0, the correct way to do this.
     }
-
 }
