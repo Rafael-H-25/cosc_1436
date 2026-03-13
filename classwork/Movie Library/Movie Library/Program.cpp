@@ -86,19 +86,47 @@ enum class EnhancedMenuCommand
 * {
 * statement
 * } and a ";"
+* 
+* If a question we never had is there: the answer is BCPL
+* 
 * func_defn ::= T id () { S* }
 * casing for fuctions: camel or Pascal , write them as Capital letter or Pascal casing and must be consistent if use functions. ex: Pascal for all functions must be consistent.
 */
 // Function definition here below. a function represents: "does something", name the function a verb/action and use standard identifiers also.
 // How to document a document below, a high requirement when intering the "(" must be correct based on the function's intension.
 // Briefs is the single sentence description of code. Major requirement to describe a function in one simple sentence. 
+// parameter: input to a function, can have any # of vairables, document: one simple sentence
+// 1. Is the variable inside the function definition side. A value is given at runtime
+// 2. Book will confirm it as a formal argument. (think parameter)
+// Arguement: a value passed to a function , in the function call. Appears in the ()
+// The book: will call it the actual arguement.
+// The naming convention of paramenter: nouns, camel case,
+// 3 different types of parameters (parameter kind):
+// 1. input parameter: Type followed by an indentifier name, when looking at a function when the parameter is a variable its an input. 
+// Also known as a "pass by value" parameter: the runtime takes the actual expression ex: 10, copies that value into the input parameter. 
+// Function: RW, Arguement: never changes. Working on a copy
+// 2. 
+// 3. 
 
+//Call stack: 
+// Very bottom is the runtime: responsible for calling your main function.
+// Then runtime displays error, and then etc. then goes in reverse after every function is called and is removed, whatever is called is the 1st in the system.
+
+void Multiply(int value, int multiple)
+{
+    // value = value * multiple
+    value *= multiple;
+    //int result = value * multiple;
+};
 
 /// @brief Displays a horizontal line.
-void DisplayLine() /* The function name determines the function action*/
+/// @param width Width of the line
+void DisplayLine( int width ) /* The function name determines the function action*/ /* The int width is a paraeter list, parameter seperated by commas, local variable declaration*/
 {
+    //int width = 10;
+    
     // Logical operation any # of code you want.
-    std::cout << "-----------------" << std::endl;
+    std::cout << std::setfill('-') << std::setw(width) << "" << std::setfill(' ') << std::endl;
 };
 
 //Function to reset color
@@ -114,22 +142,101 @@ void ClearInputBuffer()
     std::cin.ignore(INT32_MAX, '\n');    // Has 2 arguements. 
 };
 
+enum class ConsoleColor
+{
+    Black = 30,
+    Red = 31,
+    Green = 32,
+    Yellow = 33,
+    Blue = 34,
+    Magenta = 35,
+    Cyan = 36,
+    White = 37,
+
+    BrightBlack = 90,
+    BrightRed = 91,
+    BrightGreen = 92,
+    BrightYellow = 93,
+    BrightBlue = 94,
+    BrightMagenta = 95,
+    BrightCyan = 96,
+    BrightWhite = 97,
+};
+
 // Function to set text color to red
 /// @brief Sets the output color for displaying errors.
-void SetErrorColor()
+/// @param color Color to use for the foreground
+void SetForegroundColor( ConsoleColor color )
 {
-    std::cout << "\033[91m";
+    char buffer[10] = {0};
+    _itoa_s((int)color, buffer, 10, 10);
+
+    std::string value = "\033[";
+    value += buffer;
+    value += "m";
+    std::cout << value;
 };
 // Above are simple functions.
 
+/// @brief Displays a message
+/// @param color Color to show the message in.
+/// @param message Message to display
+/// @param includeNewLine Add a new color?
+void DisplayMessage(ConsoleColor color, std::string message, bool includeNewLine)
+{
+    SetForegroundColor(color);
+   
+    std::cout << message;;
+    if (includeNewLine)
+        std::cout << std::endl;
+    
+    ResetColors();
+}
+
+
+/// @brief Displays an error message.
+/// @param message Message to display.
+void DisplayError(std::string message)
+{
+    SetForegroundColor(ConsoleColor::BrightRed);
+    std::cout << "ERROR: " << message << std::endl;
+    ResetColors();
+}
+
+/// @brief Displays a warning message.
+/// @param message Message to display.
+void DisplayWarning(std::string message)
+{
+    SetForegroundColor(ConsoleColor::Yellow);
+    std::cout << "WARN: " << message << std::endl;
+    ResetColors();
+}
 // Main is a special function
 // it is the entry fuction o your program
 // it's declaration can vary slightly
 // You can't call main directly
 // Functions are compiled at isolation but it works like a variable with an expression because of C.
 
+//void Fibonacci(int value)
+//{
+//    if (value >= 1)
+//    {
+//    //1 * 2 * 3 * N
+//    //value * Fibonacci(value-1)
+//        std::cout << value << std::endl;
+//        Fibonacci(value - 1);
+//    };
+//}
+
 void main()
 {
+    //Fibonacci(1)
+
+    //int input = 10;
+    //int multiple = 5;
+    //Multiply(input, multiple);
+    //std::cout << input << std::endl;
+
     /* Demo  (Heavily used, you must know this)            SYNTAX
     * 4 operators:           x += 1, x -= 1     x'        Expression
     * Prefix increment:      ++x X + 1          x+1         x' (current new value) always get the new value
@@ -206,7 +313,7 @@ void main()
     // Display menu (simple)
         std::cout << "Main Menu" << std::endl;
         //std::cout << "------------" << std::endl;
-        DisplayLine(  // We declared a function, and made a code smaller
+        DisplayLine(10);  // We declared a function, and made a code smaller. The piece inside the () means: When the functions runs the code, the value is determined by the function, 10 "-", then you recieve 10 "-" prints.
         std::cout << "A)dd Movie" << std::endl;
         std::cout << "E)dit Movie" << std::endl;
         std::cout << "D)elete Movie" << std::endl;
@@ -244,9 +351,10 @@ void main()
 
                 default:
                 { 
-                    SetErrorColor();
+                    /*SetForegroundColor(ConsoleColor::BrightRed);
                     std::cout << "ERROR: Invalid option" << std::endl;
-                    ResetColors();
+                    ResetColors();*/
+                    DisplayError("Invalid option");
                     break; 
                 }
             }
@@ -310,7 +418,7 @@ void main()
 
                 //: Validate title
                     if (movie.title == "")
-                        std::cout << "ERROR: Title is required" << std::endl;
+                        DisplayError("Title is required");
                 }
 
                 std::cout << "Enter description: ";
@@ -365,7 +473,7 @@ void main()
                     //Runlength >= 0
                     if (movie.runLength < 0)
                     {
-                        std::cout << "ERROR: Run length must be at least 0" << std::endl;
+                        DisplayError("Run length must be at least 0");
                         //movie.runLength = 0;
                     }
                 } while (movie.runLength < 0);
@@ -395,7 +503,7 @@ void main()
 
                     if (movie.releaseYear < 1900 || movie.releaseYear > 2100)
                     {
-                        std::cout << "ERROR: Release Year must be between 1900 and 2100" << std::endl;                  // prec, /, (), unary, !, arith, relational, logical { && ||}
+                        DisplayError("Release Year must be between 1900 and 2100");                  // prec, /, (), unary, !, arith, relational, logical { && ||}
             //            movie.releaseYear = 1900;
                     }
 
@@ -434,14 +542,14 @@ void main()
                         //done = true;
                         break;
                     } else
-                        std::cout << "ERROR: Must be Y or N" << std::endl;  // != Y, y, N, n        // We are goig to expand by using a different statement. (if_state ::= if (Eb), St, [else S(f);]
+                        DisplayError("Must be Y or N");  // != Y, y, N, n        // We are goig to expand by using a different statement. (if_state ::= if (Eb), St, [else S(f);]
 
                 } while (true);
 
                 break;
             }
             //case 'E': /*std::cout << "Eddit not implemented" << std::endl; break;  */    // How to prevent fall through including the default. You need to use {} also, but it sometimes can be avoided like this.
-            case MenuCommand::Edit: std::cout << "Edit not implemented" << std::endl; break;     // if needed another statement plus the break then use the block {}
+            case MenuCommand::Edit: DisplayWarning("Edit not implemented"); break;     // if needed another statement plus the break then use the block {}
 
             //case 'D': /*std::cout << "Delete not implemented" << std::endl; break;*/
             case MenuCommand::Delete: //std::cout << "Delete not implemented" << std::endl; break;
@@ -450,8 +558,11 @@ void main()
                     break;
 
                 // Confirm
-                std::cout << "Are you sure you want to detele '" << movie.title << "' (Y/N)? ";
-
+                //std::cout << "Are you sure you want to detele '" << movie.title << "' (Y/N)? ";
+                std::string message = "Are you sure you want to delete '";
+                message += movie.title;
+                message += "' (Y/N)? ";
+                DisplayMessage(ConsoleColor::Cyan, message, false);
                 bool confirm = false;
                 do
                 {
@@ -480,7 +591,8 @@ void main()
             {
                 if (movie.title == "")
                 {
-                    std::cout << "No movies in library" << std::endl;
+                    //std::cout << "No movies in library" << std::endl;
+                    DisplayWarning("No movies in library");
                     break;
                 }
 
@@ -517,7 +629,7 @@ void main()
             break;
             case MenuCommand::Quit: quit = true; break;
             //Everything else, that execute if that value from the switch expression from everything else.
-            default: std::cout << "ERROR: Invalid option" << std::endl; break;
+            default: DisplayError("ERROR: Invalid option"); break;
 
             //    if (choice == 'A' || choice == 'a')
             //    // TODO: Move addmovie logic here
