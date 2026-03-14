@@ -19,14 +19,33 @@ struct Loan
 
 };
 
+/// @brief  Clears the input buffer of extra characters
+void ClearInputBuffer()
+{
+    std::cin.ignore(INT32_MAX, '\n');
+};
+
 
 void main()
 {
     Loan loan;
+    do
+    {
+        std::cout << "Enter initial loan amount: ";
+        std::cin >> loan.initialAmount;
+    } 
+    
+    while (loan.initialAmount < 1 || loan.initialAmount > 1000);
+    {
+        std::cin >> loan.initialAmount;
 
-
-    std::cout << "Enter initial loan amount: ";
-
-    while (loan.initialAmount < 1 || loan.initialAmount > 10000)
+        if (loan.initialAmount < 1 || loan.initialAmount > 1000)
+        {
+            std::cout << "Error: Initial loan amount must be $1-1000 range.";
+            ClearInputBuffer();
+        }   
+    };
+    
+    
     
 }
