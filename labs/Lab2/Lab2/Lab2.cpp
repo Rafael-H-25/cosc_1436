@@ -8,17 +8,25 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-struct loan
+
+struct Loan
 {
-    std::string initial
+    std::string loan;
+
+    int initialAmount = 0; 
+    int interestRate = 0; 
+
 
 };
 
 
 void main()
 {
+    Loan loan;
+
+
     std::cout << "Enter initial loan amount: ";
 
-    while (initial.loanAmount < 1 || initial.loanAmount > 10000)
-    std::cout << "Hello World!\n";
+    while (loan.initialAmount < 1 || loan.initialAmount > 10000)
+    
 }
