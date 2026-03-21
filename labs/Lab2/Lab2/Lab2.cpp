@@ -27,53 +27,51 @@ void DisplayLine(int width)
 }
 
 
-/// @brief  Clears the input buffer of extra characters
+/// @brief  Clears the input buffer of extra characters and sentences
 void ClearInputBuffer()
 {
+    std::cin.clear();
     std::cin.ignore(INT32_MAX, '\n');
 };
 
 
 void main()
 {
-    int tableWidth = 60;
+    int tableWidth = 70;
     double monthlyPayment;
     Loan loan;
     do
-    {
+    {   // Prompts user for a numerical loan number
         std::cout << "Enter a loan amount: ";
         std::cin >> loan.initialAmount;
 
         if (loan.initialAmount < 1 || loan.initialAmount > 1000)
         {
-            std::cout << "Error: Initial loan amount must be $1-1000 range." << std::endl;
-            std::cin.clear();
+            std::cout << "Issue: Initial loan amount must a numerical value from 1 to 1000 range." << std::endl;
             ClearInputBuffer();
         }
 
     } while (loan.initialAmount < 1 || loan.initialAmount > 1000);
     
     do
-    {
+    {   // Prompts user for a numerical interest number.
         std::cout << "Enter your interest rate (%): ";
         std::cin >> loan.interestRate;
 
         if (loan.interestRate < 1.0 || loan.interestRate > 100.0)
         {
-            std::cout << "Issue: Interest rate number value must be from 1-100% range." << std::endl;
-            std::cin.clear();
+            std::cout << "Issue: Interest rate amount must be a numerical value from 1 to 100 range." << std::endl;
             ClearInputBuffer();
         }
 
     } while (loan.interestRate < 1.0 || loan.interestRate > 100);
 
     do
-    {
+    {   // Prompts user for a numerical number for payment.
         std::cout << "Enter how much you want to pay each month: ";
         if (!(std::cin >> monthlyPayment) || monthlyPayment < 0 || monthlyPayment > loan.initialAmount)
         {
-            std::cout << "Payment value must be higher than zero but lower than " << loan.initialAmount << "." << std::endl;
-            std::cin.clear();
+            std::cout << "Issue: Payment value must be a numerical value that's higher than 0 but lower than the loan amount." << std::endl;
             ClearInputBuffer();
         }
         else
@@ -82,31 +80,59 @@ void main()
         }
     } while (true);
 
-    
     std::cout << std::left << std::setw(10) << "Month"
         << std::setw(15) << "Balance"
+        << std::setw(15) << "Payment"
         << std::setw(15) << "Interest"
         << std::setw(15) << "New Balance" << std::endl;
     DisplayLine(tableWidth);
-    
     std::cout << std::fixed << std::setprecision(2);
 
+    double totalPayments = 0;
+    double totalInterest = 0;
     double currentBalance = loan.initialAmount;
-    double monthRate = (loan.interestRate / 100.0) / 12.0;
+    double monthRate = (loan.interestRate / 100.0);
 
     for (int month = 1; month <= 12; month++)
     {
+        double paymentMade = 0;
         double monthInterest = 0;
+        // Provides the logic for every month after the 1st month.
         if (month > 1)
         {
-            monthInterest = currentBalance * monthRate;
+            // Prohibits payment exceeding remaining balance.
+            if (monthlyPayment > currentBalance)
+            {
+                paymentMade = currentBalance;
+            }
+            else
+            {
+                paymentMade = monthlyPayment;
+            }
+            // Removes amount from balance after payment before interest.
+            currentBalance -= paymentMade;
+            // No interest added if there's no balance.
+            if (currentBalance > 0)
+            {
+                monthInterest = currentBalance * monthRate;
+            }
         }
+        // Adds all payments and interests amounts
+        totalPayments += paymentMade;
+        totalInterest += monthInterest;
         double newLoanBalance = currentBalance + monthInterest;
 
         std::cout << std::left << std::setw(10) << month
             << "$ " << std::setw(14) << currentBalance
+            << "$ " << std::setw(14) << paymentMade
             << "$ " << std::setw(14) << monthInterest
             << "$ " << std::setw(14) << newLoanBalance << std::endl;
         currentBalance = newLoanBalance;
     }
+    // Shows your payments and interest totals
+    DisplayLine(tableWidth);
+    std::cout << std::left << std::setw(26) << "Total:"
+        << "$ " << std::setw(14) << totalPayments
+        << "$ " << std::setw(10) << totalInterest << std::endl;
+
 }
