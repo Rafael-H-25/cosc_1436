@@ -42,7 +42,7 @@ void main()
     Loan loan;
     do
     {   // Prompts user for a numerical loan number
-        std::cout << "Enter a loan amount: ";
+        std::cout << "Enter a loan amount (No commas): ";
         std::cin >> loan.initialAmount;
 
         if (loan.initialAmount < 1 || loan.initialAmount > 1000)
@@ -55,7 +55,7 @@ void main()
     
     do
     {   // Prompts user for a numerical interest number.
-        std::cout << "Enter your interest rate (%): ";
+        std::cout << "Enter your interest rate (%) (no commas): ";
         std::cin >> loan.interestRate;
 
         if (loan.interestRate < 1.0 || loan.interestRate > 100.0)
@@ -68,7 +68,7 @@ void main()
 
     do
     {   // Prompts user for a numerical number for payment.
-        std::cout << "Enter how much you want to pay each month: ";
+        std::cout << "Enter how much you want to pay each month (no commas): ";
         if (!(std::cin >> monthlyPayment) || monthlyPayment < 0 || monthlyPayment > loan.initialAmount)
         {
             std::cout << "Issue: Payment value must be a numerical value that's higher than 0 but lower than the loan amount." << std::endl;
