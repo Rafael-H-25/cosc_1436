@@ -64,6 +64,28 @@ enum class EnhancedMenuCommand
     Delete
 };
 
+
+enum class ConsoleColor
+{
+    Black = 30,
+    Red = 31,
+    Green = 32,
+    Yellow = 33,
+    Blue = 34,
+    Magenta = 35,
+    Cyan = 36,
+    White = 37,
+
+    BrightBlack = 90,
+    BrightRed = 91,
+    BrightGreen = 92,
+    BrightYellow = 93,
+    BrightBlue = 94,
+    BrightMagenta = 95,
+    BrightCyan = 96,
+    BrightWhite = 97,
+};
+
     //Function: a reusable block of code that does 1 logical thing.
     // Must sit outside of main.
     // An error message, may require 1-2 lines of code that may require its own function
@@ -112,12 +134,19 @@ enum class EnhancedMenuCommand
 // Very bottom is the runtime: responsible for calling your main function.
 // Then runtime displays error, and then etc. then goes in reverse after every function is called and is removed, whatever is called is the 1st in the system.
 
-void Multiply(int value, int multiple)
-{
-    // value = value * multiple
-    value *= multiple;
-    //int result = value * multiple;
-};
+//Prototypes / foward reference
+// Function declaration without the definition
+void DisplayError(std::string);
+void DisplayWarning(std::string);
+void ResetColors();
+void SetForegroundColor(ConsoleColor);
+
+//void Multiply(int value, int multiple)
+//{
+//    // value = value * multiple
+//    value *= multiple;
+//    //int result = value * multiple;
+//};
 
 /// @brief Displays a horizontal line.
 /// @param width Width of the line
@@ -140,27 +169,6 @@ void ResetColors()
 void ClearInputBuffer()
 {
     std::cin.ignore(INT32_MAX, '\n');    // Has 2 arguements. 
-};
-
-enum class ConsoleColor
-{
-    Black = 30,
-    Red = 31,
-    Green = 32,
-    Yellow = 33,
-    Blue = 34,
-    Magenta = 35,
-    Cyan = 36,
-    White = 37,
-
-    BrightBlack = 90,
-    BrightRed = 91,
-    BrightGreen = 92,
-    BrightYellow = 93,
-    BrightBlue = 94,
-    BrightMagenta = 95,
-    BrightCyan = 96,
-    BrightWhite = 97,
 };
 
 // Function to set text color to red
@@ -217,16 +225,142 @@ void DisplayWarning(std::string message)
 // You can't call main directly
 // Functions are compiled at isolation but it works like a variable with an expression because of C.
 
-//void Fibonacci(int value)
-//{
-//    if (value >= 1)
-//    {
-//    //1 * 2 * 3 * N
-//    //value * Fibonacci(value-1)
-//        std::cout << value << std::endl;
-//        Fibonacci(value - 1);
-//    };
-//}
+//Demoing when recursive calls never end
+// return - exits function immediately
+void Fibonacci(int value)
+{
+    //Validate parameters
+    if (value > 1)
+        return;
+
+    //1 * 2 * 3 * N
+    //value * Fibonacci(value-1)
+    std::cout << value << std::endl;
+    Fibonacci(value - 1);
+}
+
+/// @brief Confirms information from the user
+/// @param message Message to display 
+/// @return true if yes or false if no
+bool Confirm(std::string message)
+{
+    // Confirm
+    message += " (Y/N) ";
+    DisplayMessage(ConsoleColor::Cyan, message, false);
+    bool confirm = false;
+    do
+    {
+        char choice;
+        std::cin >> choice;
+        if (choice == 'Y' || choice == 'y')
+            return true;
+       /* {
+            confirm = true;
+            break;
+        } */
+        else if (choice == 'N' || choice == 'n')
+            return false; //correct version
+        /*{
+            confirm = false;
+            break;
+        }*/
+    } while (true);
+
+    //return false; // if a return is inside another return, its nt needed unless you use a break.
+}
+
+int ReadInt(std::string message, int minValue, int maxValue)
+{
+    std::cout << message;
+
+    int input;
+    
+    do
+    {
+        std::cin >> input;
+
+        if (input >= minValue && input <= maxValue)
+            return input;
+            // Fix later
+        DisplayError("Value is not in expected range");
+    } while (true);
+}
+    
+/// @brief Reads a string from the user
+/// @param message Message to display
+/// @param required true to indicate a required value
+/// @return Input from user
+std::string ReadString(std::string message, bool required)
+{
+    std::cout << message;
+
+    std::string input; 
+    do
+    {
+        std::getline(std::cin, input);
+
+    //: Validate title
+        if (input != "" || !required)
+            return input;
+
+        DisplayError("Title is required");
+    } while (true);
+}
+
+
+Movie AddMovie()
+{
+    // Reset input buffer
+    //std::cin.ignore(INT32_MAX, '\n');
+    ClearInputBuffer();
+
+    Movie movie;
+    //: Prompt for movie details
+    movie.title = ReadString("Enter title (required): ", true);
+    movie.description = ReadString("Enter decription: ", false);
+
+    for (int count = 0; count < 5; ++count)
+    {
+        std::string genre = ReadString("Enter genre: ", false);
+        if (genre != "")
+            break;
+        movie.genres += ", " + genre;
+    }
+
+    movie.runLength = ReadInt("Enter run length (in minutes): ", 0, 1000);
+    movie.releaseYear = ReadInt("Enter release year (1900-2100): ", 1900, 2100);
+
+    movie.isClassic = Confirm("Is classic?");
+    return movie;
+}
+void DeleteMovie(Movie movie)
+{
+    // No movie = no work
+    if (movie.title == "")
+        return;
+    
+    if (Confirm("Are you sure you want to delete '" + movie.title + "'"))
+        movie.title = "";
+}
+
+void ViewMovie(Movie movie)
+{
+    if (movie.title == "")
+    {
+        //std::cout << "No movies in library" << std::endl;
+        DisplayWarning("No movies in library");
+        return;
+    }
+
+//Display movie details
+    std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
+    std::cout << "Length (in minutes) " << movie.runLength << std::endl;
+    std::cout << "Genre(s): " << movie.genres << std::endl;
+    std::cout << "User Rating: " << movie.userRating << std::endl;
+    std::cout << "Classic? " << (movie.isClassic ? "Yes" : "No") << std::endl;
+    
+    std::cout << movie.description << std::endl;
+}
 
 void main()
 {
@@ -392,242 +526,13 @@ void main()
        
         switch (input)
         {
-            
-            //// TODO: Move add movie logic here
-            //case 'A':
-            ////{
-            ////    //choice = 'a'
-            ////    //std::cout << "Hello";
-            ////    std::cout << "Add not implemented" << std::endl;
-            ////    break;
-            ////}
-            case MenuCommand::Add:
-            {
-                // Add movie logic          // block declarations: c style type: , the alternantive approach is the inline delaration: //code int x = E; //code double y = E (declare it when needed and is most prefered)   
-               
-                // Reset input buffer
-                //std::cin.ignore(INT32_MAX, '\n');
-                ClearInputBuffer();
+            case MenuCommand::Add: movie = AddMovie();break;
+            case MenuCommand::Edit: DisplayWarning("Edit not implemented");
+            case MenuCommand::Delete: DeleteMovie(movie); break;
+            case MenuCommand::View: ViewMovie(movie); break;
 
-                //: Prompt for movie details
-                std::cout << "Enter title (required): ";
-
-                while (movie.title == "")
-                {
-                    std::getline(std::cin, movie.title);
-
-                //: Validate title
-                    if (movie.title == "")
-                        DisplayError("Title is required");
-                }
-
-                std::cout << "Enter description: ";
-                std::getline(std::cin, movie.description);
-
-                std::cout << "Enter genre: ";
-                
-                // Cases for when expressions can be excluded.
-                // for (;;) {/* infinite loop*/ }
-                // for (; choice < 10; ++choice) {}
-                // May have mmultiple of each expression
-                // for (int x = 0, int y = 10; x < 20, y > 0; ++x, --y) {} (only possible used when two values are getting close to each other)
-                // Goes bad in the middle expression (x < 20, y > 0), the x < 20 is removed entirely, the y > 0 is the test condition. If you want to use both then use && for ",".
-
-                //int genreCount = 0;
-                //while (genreCount < 5)
-                // Break and continue: Useable inside of a loop. Purpose
-                // Break: getting out of the case. Used when want out of the loop (stops the loop) use when needed or not precive any further. Begining of a loop or end. Use 2 or only 1.
-                // Continue statement: purpose to exit the current iteration of that loop. (it is skipped to the next part.)
-                
-//                int count = 0;
-                for (int count = 0; count < 5; ++count) // Commonly used case.
-                {
-                    std::string genre;
-                    std::getline(std::cin, genre);
-
-                    //if (genre == "")
-                    //    continue;   // still going to execute but won't enter anything with empty space. still adds up to the "5"
-                    //movie.genres += ", " + genre;
-
-                    if (genre != "")
-                    {
-                        movie.genres += ", " + genre;
-                       //++genreCount;
-                    } else
-                        //genreCount = 5;
-                        //count = 5;
-                        break;
-                }
-               
-
-                std::cout << "Enter run length (in minutes): ";
-                // do-while: do statement while (Eb),
-                //      post-test S executes at least once
-              /* movie.runLength = -1;
-                while (movie.runLength < 0)*/ // must ensure this scenario or any scenario must guarantee that it is false or will be false or it will be an infinite loop.
-                do
-                {
-                    std::cin >> movie.runLength;
-
-
-                    //Runlength >= 0
-                    if (movie.runLength < 0)
-                    {
-                        DisplayError("Run length must be at least 0");
-                        //movie.runLength = 0;
-                    }
-                } while (movie.runLength < 0);
-
-                std::cout << "Enter release year (1900-2100): ";
-                /*std::cin >> movie.releaseYear;*/
-
-                //ReleaseYear >= 1900 and <= 2100
-                /*if (movie.releaseYear < 1900)
-                {
-                    std::cout << "ERROR: Release Year must be al least 1900" << std::endl;
-                    movie.releaseYear = 1900;
-                }
-                if (movie.releaseYear > 2100)
-                {
-                    std::cout << "ERROR: Release Year must be no more than 2100" << std::endl;
-                    movie.releaseYear = 1900;
-                }*/
-                // if (A && B || C && D)        They do not share precedence
-                // if ((A && B) || (C && D))    Use this for clarity and proper intention
-                // if (A || B && C || D)
-                // if ((A || B) && (C || D)     Use this for clarity and proper intention
-                // When doing this, logical operators does short circuit evaluation. (A && B = A, B?) it skips out the evaluation to the right (How logical operations work) ( if A is F, then it all is false, B won't be checked, see table), vise versa for "||"
-                while (movie.releaseYear < 1900 || movie.releaseYear > 2100)
-                {
-                    std::cin >> movie.releaseYear;
-
-                    if (movie.releaseYear < 1900 || movie.releaseYear > 2100)
-                    {
-                        DisplayError("Release Year must be between 1900 and 2100");                  // prec, /, (), unary, !, arith, relational, logical { && ||}
-            //            movie.releaseYear = 1900;
-                    }
-
-                }
-
-                std::cout << "Enter the user rating (1.0-5.0): ";
-                std::cin >> movie.userRating;
-
-
-                char isClassic;
-                std::cout << "Is classic (Y/N)?: ";
-                /*std::cin >> isClassic;*/
-
-                //If statement
-                //  if_stat ::= if (Eb) S
-                //              [ else S];
-                // Else always goes with immediately preceding if
-                // 
-                //Translate to boolean if input is Y then true
-                //movie.isClassic = isClassic == 'Y' || isClassic == 'y'; // <= removes the need of an "if"
-
-                //bool done = false; // declare it before a loop
-                //while (!done)
-                do
-                {
-                    std::cin >> isClassic;
-
-                    if (isClassic == 'Y' || isClassic == 'y')               // <= This removes excess code from 'y'.
-                    {
-                        movie.isClassic = true;
-                        //done = true;
-                        break;
-                    } else if (isClassic == 'N' || isClassic == 'n')
-                    {
-                        movie.isClassic = false;
-                        //done = true;
-                        break;
-                    } else
-                        DisplayError("Must be Y or N");  // != Y, y, N, n        // We are goig to expand by using a different statement. (if_state ::= if (Eb), St, [else S(f);]
-
-                } while (true);
-
-                break;
-            }
-            //case 'E': /*std::cout << "Eddit not implemented" << std::endl; break;  */    // How to prevent fall through including the default. You need to use {} also, but it sometimes can be avoided like this.
-            case MenuCommand::Edit: DisplayWarning("Edit not implemented"); break;     // if needed another statement plus the break then use the block {}
-
-            //case 'D': /*std::cout << "Delete not implemented" << std::endl; break;*/
-            case MenuCommand::Delete: //std::cout << "Delete not implemented" << std::endl; break;
-            {
-                if (movie.title == "")
-                    break;
-
-                // Confirm
-                //std::cout << "Are you sure you want to detele '" << movie.title << "' (Y/N)? ";
-                std::string message = "Are you sure you want to delete '";
-                message += movie.title;
-                message += "' (Y/N)? ";
-                DisplayMessage(ConsoleColor::Cyan, message, false);
-                bool confirm = false;
-                do
-                {
-                    char choice;
-                    std::cin >> choice;
-                    if (choice == 'Y' || choice == 'y')
-                    {
-                        confirm = true;
-                        break;
-                    } else if (choice == 'N' || choice == 'n')
-                    {
-                        confirm = false;
-                        break;
-                    }
-                } while (true);
-
-             // Delete
-                if (confirm)
-                movie.title = "";
-                break;
-            }
-
-
-            //case 'V': /*std::cout << "View not implemented" << std::endl; break;*/
-            case MenuCommand::View:
-            {
-                if (movie.title == "")
-                {
-                    //std::cout << "No movies in library" << std::endl;
-                    DisplayWarning("No movies in library");
-                    break;
-                }
-
-            //Display movie details
-                std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
-                std::cout << "Length (in minutes) " << movie.runLength << std::endl;
-                std::cout << "Genre(s): " << movie.genres << std::endl;
-                std::cout << "User Rating: " << movie.userRating << std::endl;
-
-                // Conditional Operator
-                // if (Eb), E = Vt, else E = Vf, Eb ? Vt : Vf
-                // Replaces if-else when calculating a value, must understand what it is for future exams.
-                // 
-                //std::string classicIndicator = "No";
-                //if (movie.isClassic)
-                //    classicIndicator = "Yes";
-                //std::string classicIndicator = movie.isClassic ? "Yes": "No";       // We're writing how we like it, compiler figures it out on its own. 
-                                                                                //  Easy way to remove/not need if statements, for determining one or two possible values only.
-                //std::cout << "Classic? " << classicIndicator << std::endl;  
-
-                // First issue: Both Vf and Vt must be the same type, the type of conditional is the type of value is returning.
-                // Here this is string. The compiler must determine which type is it at the same time at runtime. Type coersion won't work, so you could use typecast if necessary/possible.
-                // 2nd: The compiler can't tell the expression if its a different expression, it won't bother guessing, and won't pick, to fix this then make it around a parenthesis.
-                // Ex:
-                std::cout << "Classic? " << (movie.isClassic ? "Yes" : "No") << std::endl;
-
-                // if (movie.isClassic)
-                 //   std::cout << "Classic? " << "Yes" << std::endl;         // doable but not maintainable.
-                //else
-                  //  std::cout << "Classic? " << "No" << std::endl;          // if (Eb), E = Vt, else E = Vf, Eb ? Vt : Vf (conditional operator) Anytime we need an expression for 2 other values we can use that.
-
-                std::cout << movie.description << std::endl;
-            }
-            break;
             case MenuCommand::Quit: quit = true; break;
+            
             //Everything else, that execute if that value from the switch expression from everything else.
             default: DisplayError("ERROR: Invalid option"); break;
 
