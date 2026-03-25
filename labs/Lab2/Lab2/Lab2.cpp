@@ -16,7 +16,6 @@ struct Loan
     int initialAmount = 0; 
     float interestRate = 0; 
     int monthNumber = 0;
-
 };
 
 /// @brief  Displays a horizontal line.
@@ -26,7 +25,6 @@ void DisplayLine(int width)
     std::cout << std::setfill('-') << std::setw(width) << "" << std::setfill(' ') << std::endl;
 }
 
-
 /// @brief  Clears the input buffer of extra characters and sentences
 void ClearInputBuffer()
 {
@@ -34,14 +32,13 @@ void ClearInputBuffer()
     std::cin.ignore(INT32_MAX, '\n');
 };
 
-
 void main()
 {
     int tableWidth = 70;
     double monthlyPayment;
     Loan loan;
     do
-    {   // Prompts user for a numerical loan number
+    {   // Prompts the user for a numerical loan number
         std::cout << "Enter a loan amount (No commas): ";
         std::cin >> loan.initialAmount;
 
@@ -54,7 +51,7 @@ void main()
     } while (loan.initialAmount < 1 || loan.initialAmount > 1000);
     
     do
-    {   // Prompts user for a numerical interest number.
+    {   // Prompts the user for a numerical interest number.
         std::cout << "Enter your interest rate (%) (no commas): ";
         std::cin >> loan.interestRate;
 
@@ -67,7 +64,7 @@ void main()
     } while (loan.interestRate < 1.0 || loan.interestRate > 100);
 
     do
-    {   // Prompts user for a numerical number for payment.
+    {   // Prompts the user for a numerical number for payment.
         std::cout << "Enter how much you want to pay each month (no commas): ";
         if (!(std::cin >> monthlyPayment) || monthlyPayment < 0 || monthlyPayment > loan.initialAmount)
         {
