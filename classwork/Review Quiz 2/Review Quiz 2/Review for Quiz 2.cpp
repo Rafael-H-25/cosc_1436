@@ -133,7 +133,27 @@ void main()
     *   break:                  Exit            The loop ends completely.
     *   continue:                Skip            The loop moves to the next iteration
     * 
-    *   
+    *   Do-while: the "act first, ask questions later of the loop family.
+    *   Purpose: to execute a block of code at least once before checking a condition.
+    *   Syntax: do { code to execute} while (a condition); <--- Requires a semicolon at the end.
+    *   Post-test behavior: body of the loop runs immediately, the condition is evaluated after the body finishes.
+    *   If the condtion is true, it repeats. If false it exits.
+    *   The result: the loop is guaranteed to run a minimum of 1 time, ebven if the condition is false from the start of the {}.
+    *   When to use it: It requires data for the logic based on what data is generated inside the loop ( the {} ).
+    *   User Input/Menus: 
+    *   1. When wanting to show the menu and get a choice before checking if the user wants to quit.
+    *   2. Data validation when prompting for a password or number within a range.
+    *   3. Retrying Operations.
     * 
+    *   Nested loops: a loop insde of a loop. A powerful structure but easily tricky to work with.
+    *   1. The Impact of Iterations: In a nested loop, the inner loop must complete its entire cycle fro every simgle iteration of the outer loop.
+    *   Total iterations: Is calculated by multiplying the iterations of each loop.
+    *   Example: if the outer loop runs 10 times, and the inner loop does 5 times. The code inside the inner loop will execute 50 time (10x5)
+    *   The "Reset" Behavior: Every time the outer loop starts a new trun, the inner loop's counter resets to its starting value.
+    *   
+    *   2. Impact on performance: Nested loops creates more execution time meaning an increase in data (Time complexity).
+    *   ex: Outer (n = 10) inner (n = 10) iterations: 100,      n= 100, iterations: 10,000  
+    *   3.  When to use "nested" loops: For specific tasks like 2D grids, iterating through rows and columns (outer,inner)
+    *   Comparing pairs, and patters (printing shapes or tables).
     */
 }
