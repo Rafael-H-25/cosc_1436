@@ -131,7 +131,7 @@ void main()
     *   (ex: skipping negative numbers while calculating a sum) 
     *   Statement           Effect on loop      What happens next
     *   break:                  Exit            The loop ends completely.
-    *   continue                Skip            The loop moves to the next iteration
+    *   continue:                Skip            The loop moves to the next iteration
     * 
     *   
     * 
