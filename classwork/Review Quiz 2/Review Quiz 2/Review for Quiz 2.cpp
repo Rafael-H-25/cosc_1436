@@ -34,7 +34,7 @@ void main()
     * 
     *   Logical operators: allows you to combine multiple comparison expressions into a single true/false decision. They are the "connectives" of programming logic
     *   The three logical operators:    &&: (AND) only true if both sides are true.     ! (NOT) reverses the values ( false becomes true etc.)
-    *   Truth table: shows the result changes based on the inputs (A and B)
+    *   Truth table: shows the result changes based on the inputs (A and B).
     *   | A | B | (A && B)-- AND  (A || B)-- Or  | !A  |-- NOT 
           F   F      (F)            (F)            (T) 
           F   T      (F)            (T)
