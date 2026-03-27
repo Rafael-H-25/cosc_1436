@@ -44,7 +44,7 @@ void main()
 
         if (loan.initialAmount < 1 || loan.initialAmount > 1000)
         {
-            std::cout << "Issue: Initial loan amount must a numerical value from 1 to 1000 range." << std::endl;
+            std::cout << "Issue: The nitial loan amount must a numerical value from 1 to 1000 range." << std::endl;
             ClearInputBuffer();
         }
 
@@ -52,12 +52,12 @@ void main()
     
     do
     {   // Prompts the user for a numerical interest number.
-        std::cout << "Enter your interest rate (%) (no commas): ";
+        std::cout << "Enter your interest rate (no commas or %): ";
         std::cin >> loan.interestRate;
 
         if (loan.interestRate < 1.0 || loan.interestRate > 100.0)
         {
-            std::cout << "Issue: Interest rate amount must be a numerical value from 1 to 100 range." << std::endl;
+            std::cout << "Issue: The Interest rate amount must be a numerical value from 1 to 100 range." << std::endl;
             ClearInputBuffer();
         }
 
