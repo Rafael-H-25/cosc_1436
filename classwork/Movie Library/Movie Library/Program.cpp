@@ -148,10 +148,39 @@ void SetForegroundColor(ConsoleColor);
 //    //int result = value * multiple;
 //};
 
+// Variables
+// Local: - Declared inside a function and has a lifetime tied to the fuction call
+// Global - Declared outside a fuction and has a program lifetime.
+// Only use case:       Used when multiple functions need access to data that is impractical to pass as parameters
+//ex: valid to the entire program and is usable everywhere.
+// the "g_" represents our global variable
+// Issues w/ global:
+/*  1. Functions are no longer isolated. ex: header files: violates the function rule.
+*   2. Initialization order is undefined.
+*   3. Anyone can read and write them.  Every part of the problem can rewrite it. 
+*/
+// Only one exception case: when you need one static piece of data that isn't changed.
+
+//int g_standardConsoleLineLength = 80;
+//int g_maximumLineLength = g_standardConsoleLineLength;  //This code may not work. The order can be any one because the order is undefined.
+const int g_maximumLineLength = 80; // Only allowed case for a constant.
+
+
 /// @brief Displays a horizontal line.
 /// @param width Width of the line
-void DisplayLine( int width ) /* The function name determines the function action*/ /* The int width is a paraeter list, parameter seperated by commas, local variable declaration*/
+void DisplayLine( int width ) /* The function name determines the function action*/ /* The int width is a parameter list, parameter seperated by commas, local variable declaration*/
 {
+    int maximumLineLength = -1; // Make sure a variable isn't the same as a global variable.
+    
+    {
+        double width = 24;
+        int someValue = width * g_maximumLineLength;
+    }
+
+    if (width < 0)
+        width = 0;
+    else if (width > g_maximumLineLength)
+        width = g_maximumLineLength;
     //int width = 10;
     
     // Logical operation any # of code you want.
@@ -285,7 +314,12 @@ int ReadInt(std::string message, int minValue, int maxValue)
         DisplayError("Value is not in expected range");
     } while (true);
 }
-    
+
+int ReadInt(std::string message, int minValue)
+{
+    return ReadInt(message, minValue, INT32_MAX);
+}
+
 /// @brief Reads a string from the user
 /// @param message Message to display
 /// @param required true to indicate a required value
@@ -299,12 +333,24 @@ std::string ReadString(std::string message, bool required)
     {
         std::getline(std::cin, input);
 
-    //: Validate title
+        //Validate
         if (input != "" || !required)
             return input;
 
-        DisplayError("Title is required");
+        DisplayError("Value is required");
     } while (true);
+}
+
+// Function overloading- Overloading a fuction's name by parameter types.
+// 1. Each overload must use the same name
+// 2. Each pverload must have at least one parameter type that is different.
+
+/// @brief Reads an optional string
+/// @param message Message to display
+/// @return Input from user
+std::string ReadString(std::string message)
+{
+    return ReadString(message, false);
 }
 
 
@@ -315,9 +361,10 @@ Movie AddMovie()
     ClearInputBuffer();
 
     Movie movie;
-    //: Prompt for movie details
+    // Prompt for movie details
+    
     movie.title = ReadString("Enter title (required): ", true);
-    movie.description = ReadString("Enter decription: ", false);
+    movie.description = ReadString("Enter description: ");
 
     for (int count = 0; count < 5; ++count)
     {
@@ -327,13 +374,18 @@ Movie AddMovie()
         movie.genres += ", " + genre;
     }
 
-    movie.runLength = ReadInt("Enter run length (in minutes): ", 0, 1000);
+    movie.runLength = ReadInt("Enter run length (in minutes): ", 0);
     movie.releaseYear = ReadInt("Enter release year (1900-2100): ", 1900, 2100);
 
     movie.isClassic = Confirm("Is classic?");
     return movie;
 }
-void DeleteMovie(Movie movie)
+
+// To-do fix this later correctly.
+// Movie is pass by reference "&". By doing this, it impacts how the function is called. Pass by reference: return back to the call stack. Requires the arguement to be a variable of an L value.
+// Pass by reference (input/output) T& id
+//  Function can modify arguement.
+void DeleteMovie(Movie& movie)
 {
     // No movie = no work
     if (movie.title == "")
@@ -343,7 +395,9 @@ void DeleteMovie(Movie movie)
         movie.title = "";
 }
 
-void ViewMovie(Movie movie)
+// Pass by Reference makes sense when: copying the vaalue is too expensive or large or not allowed
+// Make the param constant to avoid modifications
+void ViewMovie(Movie const& movie)
 {
     if (movie.title == "")
     {
