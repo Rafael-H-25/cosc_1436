@@ -9,12 +9,14 @@
 
 
 //Movie definition
+const int MaximumGenres = 5;
 struct Movie
 {
     //Fields
     std::string title;  // Required, not empty
 
-    std::string genres; // comma seperated list
+    std::string genres[MaximumGenres]; // comma seperated list
+    int genreCount = 0;
 
     int runLength = 0;      // >=0
     int releaseYear = 0;    // 1900 to 2100
@@ -59,7 +61,6 @@ enum class EnhancedMenuCommand
     Delete
 };
 
-
 enum class ConsoleColor
 {
     Black = 30,
@@ -91,7 +92,6 @@ void SetForegroundColor(ConsoleColor);
 //int g_standardConsoleLineLength = 80;
 //int g_maximumLineLength = g_standardConsoleLineLength;  //This code may not work. The order can be any one because the order is undefined.
 const int g_maximumLineLength = 80; // Only allowed case for a constant.
-
 
 /// @brief Displays a horizontal line.
 /// @param width Width of the line
@@ -273,12 +273,14 @@ Movie AddMovie()
     movie.title = ReadString("Enter title (required): ", true);
     movie.description = ReadString("Enter description: ");
 
-    for (int count = 0; count < 5; ++count)
+    for (int count = 0; count < MaximumGenres; ++count)
     {
         std::string genre = ReadString("Enter genre: ", false);
-        if (genre != "")
+        if (genre == "")
             break;
-        movie.genres += ", " + genre;
+
+        movie.genres[count] = genre;
+        ++movie.genreCount;
     }
 
     movie.runLength = ReadInt("Enter run length (in minutes): ", 0);
@@ -309,12 +311,23 @@ void ViewMovie(Movie const& movie)
     //Display movie details
     std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
     std::cout << "Length (in minutes) " << movie.runLength << std::endl;
-    std::cout << "Genre(s): " << movie.genres << std::endl;
+    //std::cout << "Genre(s): " << movie.genres << std::endl;
+    std::cout << "Genres: ";
+    for (int index = 0; index < movie.genreCount; ++index)
+    {
+            if (index > 0)
+                std::cout << ", ";
+            std::cout << movie.genres[index];
+
+    }
+    std::cout << std::endl;
+
     std::cout << "User Rating: " << movie.userRating << std::endl;
     std::cout << "Classic? " << (movie.isClassic ? "Yes" : "No") << std::endl;
     
     std::cout << movie.description << std::endl;
 }
+
 void ArrayDemo()
 {
     const int MaximumValues = 10;
@@ -355,6 +368,64 @@ void ArrayDemo()
         std::cout << value << " ";
     }
 }
+
+void ArrayInitDemo()
+{
+    // Zero array initialization- inititallizer all elements in the array: works in the primitive except the string. 
+    //int daysInMonth[12] = {0};
+
+    // Full array initialization sets all 
+    int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 , 31};
+
+    // Init each element to specific value
+    /*daysInMonth[0] = daysInMonth[2] = daysInMonth[4] = daysInMonth[6] = daysInMonth[7] = daysInMonth[9] = daysInMonth[11] = 31;
+    daysInMonth[3] = daysInMonth[5] = daysInMonth[8] = daysInMonth[10] = 30;
+    daysInMonth[1] = 28;*/
+         
+    // Implicit array string - when using an array initializater, size of array is optional. Only useful in something like "month names", "sides in a shape", ect.
+    // Use cases: 
+    // 1. Size of array will never change for your life.
+    // 2. String
+    std::string monthNames[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    //monthNames[0] = "Jan";
+    //monthNames[1] = "Feb";
+    //monthNames[2] = "Mar";
+    //monthNames[3] = "Apr";
+    //monthNames[4] = "May";
+    //monthNames[5] = "Jun";
+    //monthNames[6] = "Jul";
+    //monthNames[7] = "Aug";
+    //monthNames[8] = "Sep";
+    //monthNames[9] = "Oct";
+    //monthNames[10] = "Nov";
+    //monthNames[11] = "Dec";
+
+    for (int index = 0; index < 12; ++index)
+        std::cout << monthNames[index] << " has " << daysInMonth[index] << " days" << std::endl;
+
+    // Partial array initialization - only some elment values are set, the rest are zero initialized. 
+    char name[100] = {'8', 'o', 'b'}; //"Tom"
+    char companyName[] = "My Company";
+
+    double rates[5] = {1.2, 3.4, 5.6, 7.8, 9.0};
+
+
+    int numbers[10];
+
+    // Off by one errors: 
+    // Starting at 1 and therefore skipping first element
+    // Indexing to size which is one after the last element
+    // General purpose: for loop
+
+    for (int index = 0; index < 10; ++index)
+        numbers[index] = index + 1;
+
+    for (int index = 0; index < 10; ++index)
+        std::cout << numbers[index] << " ";
+    std::cout << std::endl;
+
+}
+
 void main()
 { 
     //ArrayDemo();
