@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="FallingDistance/FallingDistance.vcxproj" />
+  <Project Path="FallingDistance/FallingDistance.vcxproj" Id="e65124d6-2278-4b1f-8927-c895bd2e4e47" />
 </Solution>
