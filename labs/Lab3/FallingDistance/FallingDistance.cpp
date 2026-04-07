@@ -29,53 +29,43 @@ void ClearInputBuffer()
 double calculateFallingDistance(int seconds)
 {
     const double g = 9.8;
-    double distance = 0.5 * g * (seconds * seconds);
-    return distance;
-}
+    return 0.5 * g * (seconds * seconds);
+};
 
 /// @brief Converts units of Meters to Feet
-/// @param m M means meaters
+/// @param m M means meters
 /// @return Returns feet value
-double convertMeterToFeet(double m)
+double convertMeterToFeet(double meter)
 {
-    return m * 3.28084;
-}
+    return meter * 3.28084;
+};
 
-/// @brief Displays table of information of distance fallen per second
-/// @param totalSeconds Total seconds
-/// @param g Gravity number
-/// @param unitLabel The unit chosen for data table
-void displayDistanceTable(int totalSeconds, int choice, std::string unitLabel)
-{   //Table Header
-    DisplayLine(35);
-    std::cout << std::left << std::setw(15) << "Seconds"
-        << std::setw(15) << "Distance (" << unitLabel << ")" << std::endl;
-    DisplayLine(35);
-
-    std::cout << std::fixed << std::setprecision(2);
-
-    //The table rows
-    for (int currentSecond = 1; currentSecond <= totalSeconds; currentSecond++)
+/// @brief Calculates velocity
+/// @param seconds The speed of distance traveled per second
+/// @return Returns the velocity
+double calculateVelocity(int seconds)
+{
+    const double g = 9.8;
+    const double terminalVelocity = 90.0;
+    double velocity = g * seconds;
+    if (velocity > terminalVelocity)
     {
-        double distance = calculateFallingDistance(currentSecond);
-        if (choice == 2)
-        {
-            distance = convertMeterToFeet(distance);
-        }
- 
-        std::cout << std::left << std::setw(15) << currentSecond
-            << std::setw(15) << distance << std::endl;
+        velocity = terminalVelocity;
     }
-    DisplayLine(32);
-}
+    return velocity;
+};
 
 /// @brief Displays program information
 void displayProgramHeader()
 {
-    std::cout << "FallingDistance" << std::endl;
+    DisplayLine(50);
+    std::cout << "      Falling Distance and Velocity Calculator        " << std::endl;
+    DisplayLine(50);
     std::cout << "Programmer: Rafael Hernandez" << std::endl;
     std::cout << "Course: COSC 1436" << std::endl;
     std::cout << "Semester: Spring 2026" << std::endl;
+    DisplayLine(50);
+    std::cout << std::endl;
 };
 
 /// @brief Asks for a falling time number from 1 to 60.
@@ -84,17 +74,45 @@ int getFallingTime()
 {
     int time;
     std::cout << "Please enter falling time in seconds (1-60): ";
-    std::cin >> time;
-
-    while (time < 1 || time > 60)
+    
+    while (!(std::cin >> time) || time < 1 || time > 60)
     {
         std::cout << "Problem: Invalid value. Please enter a value between 1 and 60: ";
         ClearInputBuffer();
-        std::cin >> time;
     }
     return time;
 };
 
+/// @brief Displays table of information of distance fallen per second
+/// @param totalSeconds Total seconds
+/// @param g Gravity number
+/// @param unitLabel The unit chosen for data table in distance
+void displayDistanceTable(int totalSeconds, int choice, std::string unitLabel)
+{   //Table Header
+    DisplayLine(50);
+    std::cout << std::left << std::setw(12) << "Seconds"
+        << std::setw(22) << "Distance" 
+    << std::setw(15) << "Velocity" << std::endl;
+    DisplayLine(50);
+    std::cout << std::fixed << std::setprecision(2);
+
+    //The table rows per second
+    for (int currentSecond = 1; currentSecond <= totalSeconds; currentSecond++)
+    {
+        double distance = calculateFallingDistance(currentSecond);
+        double velocity = calculateVelocity(currentSecond);
+        
+        if (choice == 2)
+        {
+            distance = convertMeterToFeet(distance);
+        }
+
+        std::cout << std::right << std::setw(4) << currentSecond << "s   "
+            << std::setw(12) << distance << unitLabel << "   "
+            << std::setw(12) << velocity << "m/s" << std::endl;
+    }
+    DisplayLine(50);
+}
 
 int main()
 {
@@ -104,19 +122,19 @@ int main()
     int unitChoice;
     std::string unitName = "m";
 
-    std::cout << "Choose the unit:" << std::endl;
-    std::cout << "1. Meters" << std::endl;
-    std::cout << "2. Feet" << std::endl;
-    std::cout << "Selected: "; 
-    std::cin >> unitChoice;
-    
+    std::cout << "Select units:(1) Meters or (2) Feet: "; 
+    while (!(std::cin >> unitChoice) || (unitChoice != 1 && unitChoice != 2))
+    {
+        std::cout << "Issue: Enter 1 or 2 for your measurement type." << std::endl;
+        ClearInputBuffer();
+    }
+
     if (unitChoice == 2)
     {
-        unitName = "feet";
+        unitName = "ft";
     }
     
     int seconds = getFallingTime();
-
     displayDistanceTable(seconds, unitChoice, unitName);
     
     return 0;
