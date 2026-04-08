@@ -12,6 +12,10 @@
 const int MaximumGenres = 5;
 struct Movie
 {
+    int id;
+
+
+
     //Fields
     std::string title;  // Required, not empty
 
@@ -262,6 +266,18 @@ std::string ReadString(std::string message)
     return ReadString(message, false);
 }
 
+/// @brief Find a movie given its ID
+/// @param movies 
+/// @param size 
+/// @param id 
+/// @return 
+int FindMovieById(Movie movies[], int size, int id)
+{
+    for (int index = 0; index < size; ++index)
+        if (movies[index].id == id)
+            return index;
+    return -1;
+}
 
 Movie AddMovie()
 {
@@ -290,6 +306,29 @@ Movie AddMovie()
     return movie;
 }
 
+// Arrays as parameters are always open arrays (Any size/undefined size) Any function you write musts support an open array.
+// arrays size always follows array parameters
+int AddMovie( Movie movies [], int size )
+{//you cannot determine the data at runtime in an array.
+    // Get the movie details
+    Movie movie = AddMovie();
+
+    //find an empty spot in the array
+    static int id = 1;
+    
+    for (int index = 0; index < size; ++index)
+    {
+        if (movies[index].title == "") // Find 1st element that isn't assigned
+        {
+            movie.id = id++;
+
+            movies[index] = movie;
+            return index;
+        }
+    }
+    return -1;
+}
+
 void DeleteMovie(Movie& movie)
 {
     // No movie = no work
@@ -300,15 +339,34 @@ void DeleteMovie(Movie& movie)
         movie.title = "";
 }
 
+// Arrays are pass by value
+// Array behaves like pass by reference (parameter and arguement point to the same arrat in memory)
+// Since the parameter is a pass by value, you cannot change what the arguement refers to (the array)
+// Arrays cannot be the return type of a function, if you do, the function will fail the call.
+void DeleteMovies(Movie movies[], int size)
+{
+    //Determine movie to delete
+    int id = ReadInt("Enter ID of the movie to delete: ", 1);
+
+    // Find the movie.
+    int index = FindMovieById(movies, size, id);
+    if (index < 0 || index >= size)
+    {
+        DisplayWarning("Movie not found");
+            return;
+    };
+    //Delete it
+    DeleteMovie(movies[index]);
+}
+
 void ViewMovie(Movie const& movie)
 {
     if (movie.title == "")
-    {
-        DisplayWarning("No movies in library");
         return;
-    }
+    
 
     //Display movie details
+    std::cout << "[" << movie.id << "] ";
     std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
     std::cout << "Length (in minutes) " << movie.runLength << std::endl;
     //std::cout << "Genre(s): " << movie.genres << std::endl;
@@ -326,6 +384,17 @@ void ViewMovie(Movie const& movie)
     std::cout << "Classic? " << (movie.isClassic ? "Yes" : "No") << std::endl;
     
     std::cout << movie.description << std::endl;
+}
+
+void ViewMovies(Movie movies[], int size)
+{
+    //For range statement doesn't work with array parameters
+
+    for (int index = 0; index < size; ++index)
+    {
+        if (movies[index].title != "")
+            ViewMovie(movies[index]);
+    }
 }
 
 void ArrayDemo()
@@ -375,7 +444,7 @@ void ArrayInitDemo()
     //int daysInMonth[12] = {0};
 
     // Full array initialization sets all 
-    int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 , 31};
+    int daysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 , 31 };
 
     // Init each element to specific value
     /*daysInMonth[0] = daysInMonth[2] = daysInMonth[4] = daysInMonth[6] = daysInMonth[7] = daysInMonth[9] = daysInMonth[11] = 31;
@@ -386,6 +455,8 @@ void ArrayInitDemo()
     // Use cases: 
     // 1. Size of array will never change for your life.
     // 2. String
+    // Disadvantage: the size if it.
+    // Know the size of it. months in a year.
     std::string monthNames[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     //monthNames[0] = "Jan";
     //monthNames[1] = "Feb";
@@ -426,9 +497,42 @@ void ArrayInitDemo()
 
 }
 
+void CopyArray(int target[], int targetSize, int source[], int sourceSize)
+{
+    int size = (sourceSize <= targetSize) ? sourceSize : targetSize;
+
+    for (int index = 0; index < size; ++index)
+        target[index] = source[index];
+}
+
+bool CompareArray(int left[], int leftSize, int right[], int rightSize)
+{
+    if (leftSize != rightSize)
+        return false;
+    for (int index = 0; index < leftSize; ++index)
+        if (left[index] != right[index])
+            return false;
+    return true;
+}
+void ArrayUsageDemo()
+{
+    // Things toy can't do with array variables.
+    int array1[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int array2[10] = {2, 4, 6, 8, 9, 10, 12, 14, 16, 20};
+
+    // Copy them
+    CopyArray(array2, 10, array1, 5);
+
+    //Compare them
+    bool areEqual = CompareArray(array1, 10, array2, 10);
+
+    //Display them
+    std::cout << array1 << std::endl;
+}
+
 void main()
 { 
-    //ArrayDemo();
+    //ArrayDe
 
     //Movie movie;
 
@@ -504,37 +608,17 @@ void main()
         {
             case MenuCommand::Add:
             {
-                // Get the movie details
-                // Find the first element not being used in the array
-                // Store new movie there, if any.
-                Movie movie = AddMovie();
+                int index = AddMovie(movies, MaximumMovies);
 
-                int index;
-                for (index = 0; index < MaximumMovies; ++index)
-                {
-                    if (movies[index].title == "") // Find 1st element that isn't assigned
-                    {
-                        movies[index] = movie;
-                        break;
-                    }
-                }
-
-                if (index == MaximumMovies)
+                if (index < 0)
                     DisplayError("No more space is avaliable");
 
                 break; 
             }
             case MenuCommand::Edit: DisplayWarning("Edit not implemented");
-            case MenuCommand::Delete: DeleteMovie(movies[0]); break;
-            case MenuCommand::View:
-            {
-                for (Movie movie: movies)
-                {
-                    if (movie.title != "")
-                        ViewMovie(movie);
-                }
-                break;
-            }
+            case MenuCommand::Delete: DeleteMovies(movies, MaximumMovies); break;
+            case MenuCommand::View: ViewMovies(movies, MaximumMovies); break;
+            
             case MenuCommand::Quit: quit = true; break;
             
             default: DisplayError("ERROR: Invalid option"); break;
