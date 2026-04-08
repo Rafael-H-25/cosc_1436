@@ -499,7 +499,7 @@ void main()
                 }
             }
         }
-     
+      
         switch (input)
         {
             case MenuCommand::Add:
