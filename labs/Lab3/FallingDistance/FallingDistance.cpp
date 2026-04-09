@@ -33,15 +33,15 @@ double calculateFallingDistance(int seconds)
 };
 
 /// @brief Converts units of Meters to Feet
-/// @param m M means meters
-/// @return Returns feet value
+/// @param meter The automatic unit of length
+/// @return Returns foot value
 double convertMeterToFeet(double meter)
 {
     return meter * 3.28084;
 };
 
-/// @brief Calculates velocity
-/// @param seconds The speed of distance traveled per second
+/// @brief Calculates velocity by the seconds given
+/// @param seconds The time given by user
 /// @return Returns the velocity
 double calculateVelocity(int seconds)
 {
@@ -83,10 +83,10 @@ int getFallingTime()
     return time;
 };
 
-/// @brief Displays table of information of distance fallen per second
-/// @param totalSeconds Total seconds
-/// @param g Gravity number
-/// @param unitLabel The unit chosen for data table in distance
+/// @brief Displays the table of time, distance, and velocity per second
+/// @param totalSeconds The total seconds given by user
+/// @param choice The unit measurement chosen by user
+/// @param unitLabel The units for distance. 
 void displayDistanceTable(int totalSeconds, int choice, std::string unitLabel)
 {   //Table Header
     DisplayLine(50);
@@ -99,15 +99,15 @@ void displayDistanceTable(int totalSeconds, int choice, std::string unitLabel)
     //The table rows per second
     for (int currentSecond = 1; currentSecond <= totalSeconds; currentSecond++)
     {
-        double distance = calculateFallingDistance(currentSecond);
-        double velocity = calculateVelocity(currentSecond);
+        double distance = calculateFallingDistance(currentSecond);  // 2nd row of information
+        double velocity = calculateVelocity(currentSecond);         // 3rd row of information
         
-        if (choice == 2)
+        if (choice == 2)    // Converts meters to feet.
         {
             distance = convertMeterToFeet(distance);
         }
 
-        std::cout << std::right << std::setw(4) << currentSecond << "s   "
+        std::cout << std::right << std::setw(4) << currentSecond << "s   "  // Shows units
             << std::setw(12) << distance << unitLabel << "   "
             << std::setw(12) << velocity << "m/s" << std::endl;
     }
