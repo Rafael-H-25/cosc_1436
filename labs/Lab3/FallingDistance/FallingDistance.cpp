@@ -125,7 +125,7 @@ int main()
     std::cout << "Select units:(1) Meters or (2) Feet: "; 
     while (!(std::cin >> unitChoice) || (unitChoice != 1 && unitChoice != 2))
     {
-        std::cout << "Issue: Enter 1 or 2 for your measurement type." << std::endl;
+        std::cout << "Issue: Enter 1 or 2 for your measurement type: ";
         ClearInputBuffer();
     }
 
