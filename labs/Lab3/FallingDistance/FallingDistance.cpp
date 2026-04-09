@@ -120,7 +120,7 @@ int main()
 
     // Default choice
     int unitChoice;
-    std::string unitName = "m";
+    std::string unitName = "m"; 
 
     std::cout << "Select units:(1) Meters or (2) Feet: "; 
     while (!(std::cin >> unitChoice) || (unitChoice != 1 && unitChoice != 2))
