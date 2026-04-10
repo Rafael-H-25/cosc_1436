@@ -514,27 +514,106 @@ bool CompareArray(int left[], int leftSize, int right[], int rightSize)
             return false;
     return true;
 }
+
+void DisplayArray(int values[], int size, int elementsPerLine, std::string delimiter)
+{
+    for (int index = 0; index < size; ++index)
+    {
+        /*std::cout << values[index] << " ";*/
+        // Divides index by elements, when evenly divisible then print newline.
+        if (index % elementsPerLine == 0 && index != 0)
+            std::cout << std::endl;
+
+        std::cout << values[index] << delimiter;
+    }
+    std::cout << std::endl;
+}
+
 void ArrayUsageDemo()
 {
     // Things toy can't do with array variables.
     int array1[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int array2[10] = {2, 4, 6, 8, 9, 10, 12, 14, 16, 20};
 
-    // Copy them
+    // Can't Copy them
+    // array2 = array1
     CopyArray(array2, 10, array1, 5);
 
-    //Compare them
+    // Can't Compare them
+    // bool areEqual == array1 == array2
     bool areEqual = CompareArray(array1, 10, array2, 10);
 
-    //Display them
-    std::cout << array1 << std::endl;
+    //Can't Display them
+    //std::cout << array1 << std::endl;
+    DisplayArray(array1, 10, 5, " ");
+
+    //Pre/Postfix increment
+    int values[3] = {1, 2, 3};
+    int sum = 0;
+    
+    int index = 0;
+    while (index < 3)
+    {
+        //Most common index 'Prefix' ++x, values[1], values[2]
+        //sum += values[++index]; 
+        //sum += values[index++]; //values[0], values[1] ,values[2]
+
+
+        //Prefix to the element
+        //sum += ++values[index];
+        //index++;
+
+        // equivalent to previous lines
+        sum += ++values[index++];
+    }
+
+}
+
+void DisplayTable(int table[][12], int size)
+{
+    for (int row = 0; row < size; ++row)
+        DisplayArray(table[row], 12, 12, " ");  // Prints out an array of tabels.
+        //for (int col = 0; col < 12; ++col)
+          //  std::cout << table[row][col] << " ";
+    
+    std::cout << std::endl;
+}
+
+void MultiDimentionalArrayDemo()
+{
+    // 10 x 12 table of values
+    const int MaxRows = 100;
+    const int MaxCols = 100;
+    int multiplication[MaxRows][MaxCols] = {
+        { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 },
+        { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24},
+        { 3, 6, 9, 12 },
+        { 4, 8, 12, 16 }
+    };
+        // Table with 10 rows and 12 columns
+    
+    // 2 ways to store tables in memory:
+    // Row major - (C++) problem : how to store a stucutre 3D+ into simple values:
+    // We store by row. We store the entire rows value then the next one. ex: A1-B1-C1-D1, then. Stored consecutive in memory.
+    // The perfect way to all the values in the row then the next one until done. Reading the array stored in memory. (row stored first, for row; for col)
+    // 
+    // Column major
+    // Store the whole column: A1-4, then B1-4.
+    // Reads 1 element at a time. Need to do rows of 1st column before moving to the next column.
+        for (int row = 0; row < MaxRows; ++row)
+            for (int col = 0; col < MaxCols; ++col)
+                multiplication[row][col] = (row + 1) * (col + 1);
+
+ /*   DisplayTable(multiplication, MaxRows);*/
 }
 
 void main()
 { 
-    //ArrayDe
 
     //Movie movie;
+    //ArrayDemo();
+    //ArrayIntDemo();
+    //ArrayUsageDemo();
 
     // Array: multiple values stored as 1 into a single variable.
     // arr_decl::= 'Type' 'identifier name' [expression] alocates space for 5 movies.
