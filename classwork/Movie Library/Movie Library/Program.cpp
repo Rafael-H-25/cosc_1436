@@ -359,22 +359,26 @@ void DeleteMovies(Movie movies[], int size)
     DeleteMovie(movies[index]);
 }
 
+/// @brief View movie details
+/// @param movie Movie to review
 void ViewMovie(Movie const& movie)
 {
     if (movie.title == "")
         return;
+
+
     
 
     //Display movie details
     std::cout << "[" << movie.id << "] ";
     std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
     std::cout << "Length (in minutes) " << movie.runLength << std::endl;
-    //std::cout << "Genre(s): " << movie.genres << std::endl;
     std::cout << "Genres: ";
     for (int index = 0; index < movie.genreCount; ++index)
     {
             if (index > 0)
                 std::cout << ", ";
+
             std::cout << movie.genres[index];
 
     }
@@ -636,6 +640,94 @@ void main()
     // Local variables are stored on stack so be careful of stack space.
     const int MaximumMovies = 100;
     Movie movies[MaximumMovies];
+
+        // Computer memory:
+    // Windows POV: Operating systems separate them in 2 blocks 
+    // 1. Kornel OS, you can't enter it
+    // 2. User code: Code runs here.
+    //
+    // Memory runs at 0, if at home on windows runs 128GB (64 or less GB)       
+    // Code uses 1 terribyte.
+    // Enterprises uses 6 terrabytes.
+    // 
+    // Memory sizes types:                  bytes: (8 bits, 0-1) 1 byte = 2^8 or 256 possible values.
+    // Byte                                 1               Small files
+    // Kilobyte                             1024        
+    // Megabyte                             1024 KB         Normal files
+    // Gigabyte                             1024 MB         large files, memory caps, hard drives.
+    // Terabyte                             1024 GB         SDD, upper end of memory sizes.
+    // 
+    // (Beyond our range)
+    // Pentabyte                            1024 TB         6 PB of words of the book world for reference.
+    // Exabyte                              1024 PB         theoretical
+    // 
+    // We can look at memory names, and represent as 1000, 5155 and such.
+    // We now write as 0x(memory address)1000           reads as x1000.         memory not integer values.
+    // 32 bit and 64 bit:
+    // How big is a memory address. Either a 4 byte value or 8 byte value.
+    // If 4 bytes, I can only go to 4 GB of memory.
+    // If 8 bytes, I can use the larger types.
+    // All your pointers are 8 bytes today.
+    // Pointers: code is dependent on if it is a 32 bit or 64 as they are not interchangeable.
+    // Fixed at point of compulation.
+    // Limitations: No machine that has more than 128 TB of memory.
+    // Rules of memory:
+    // 1. Memory address to 0, if done, then the program crashes, the value 0 is a bad memory address.
+    // 2. In the x range of the memory, the program code runs, it can't be read or entered in. (read only memory that is executed.)
+    // 3. Callstack: Alocated somewhere in the memory, grows overtime and a some point and will run into the code and will cause an overflow.
+    // 4. The rest of the memory is the 'heat' (global memory). Domain of pointers!! Stuff outside of the call stack and the memory.
+    //  Pointer: talking about some pointer to some place in memory. Visibility into the memory you have access to. (hopefully in the heat)
+    // You must declare the pointer, its a type.
+    //
+
+    int someValue = 100; 
+    int* ptrValue;      
+                        // Local variables stored on the call stack, 4 bytes in size
+                        // Local variable, stored on call stack, 4 or 8 bytes in size.      Pointer are memory address
+                        // Stores a memory address, int* p; ----> |  0x1000   | 
+                        // Each pointer stores 8 bytes, and has the full range avaliable.
+                        // Issue, how to locate it. (have access to it) If you do, then you will break your computer.
+                        // Need to give it a memory address that is valid.
+                        // Capturing the memory address of local variables. Memory address is always an integer.
+    ptrValue = &someValue;   
+    std::cout << "Pointer value = " << ptrValue << " "
+        << "Dereferenced value = " << *ptrValue << " "
+        << "Some Value address = " << &someValue << " "
+        << "Some Value value = " << someValue << ""
+        << std::endl;
+
+    *ptrValue = 200;
+
+
+    // Ensure the pointer is initialized to a pointer address, if you don't then you crash. The best way is to assign a value, some times you can't
+    // 1. To use the key word nullptr; (most preferred, its 0) ( double* ptrRate = nullptr;)
+    // 2. Old C++ and C code, not been recommended since a decade, only seen in old code. Not the same and won't be supported soon. (unsafe way: *ptrRate = NULL;)
+    // 
+    // Gets more complicated when using type
+    // Pointer add more complexity
+    // Type of a pointer is always an integer address. (32-64 bit, for us 64.)
+    // What kind of poiner address interger or memory address
+    // Derefencing a pointer, the type is the type it points to. READ IT RIGHT TO LEFT.
+    // This is a pointer int* ptrValue;  
+    // T* means pointer to T means the dereference value is type T
+    // Dereferencing a pointer to an int: *(int*) => int
+    // * (double*) => double
+    // Questions: Whats the size of this pointer ( float* ptr ==> 8, dereferenced: 4)
+    // double* pD; ==> 8  *pD ==> 8,   char* pC; ==> 8 , *pC 1
+    // When dealing a pointer, 8 bytes
+    //T* has 8 bytes (memory address)
+    //*p ==> T
+    // 
+    // 
+    // Pointer
+    // 1) every pointers value is a memory address (value := memory addr
+    // 2) Value it points to (Dereferenced value)
+    // 3) Memory changes every run, we care it pointing to where we expect it to. We are more interested to degenerated value.
+    // The Dereferencing a pointer: Gives you the acess to the value stored at that pointer
+    //  dereference_op ::= *  E
+    // *ptrValue
+
+
 
     bool quit = false;
     while (!quit)
