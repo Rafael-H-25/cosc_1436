@@ -73,7 +73,7 @@
 // 
 //      Global Scope: Variables declared outside all functions are accessible throughout the entire file.
 //      Variables created outside of all functions (at the very top). They are "immortal" and can be seen by every function.      
-// 
+//  
 //      Overriding (Shadowing): If a local variable has the same name as a global one, the local variable "shadows" or overrides the global one within that function's scope. [3, 6, 9, 11] 
 //
 //  6. Advanced Execution   
