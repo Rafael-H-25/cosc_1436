@@ -611,37 +611,9 @@ void MultiDimentionalArrayDemo()
  /*   DisplayTable(multiplication, MaxRows);*/
 }
 
-void main()
-{ 
-
-    //Movie movie;
-    //ArrayDemo();
-    //ArrayIntDemo();
-    //ArrayUsageDemo();
-
-    // Array: multiple values stored as 1 into a single variable.
-    // arr_decl::= 'Type' 'identifier name' [expression] alocates space for 5 movies.
-    // By declaring 5 movies, we can store up to 5 movies, and each movie is independent to the other.
-    // Array stores elements which you can equate to values.
-    // restrictions: You can't declarate different types.
-    // array names are always plural.
-    // All elements have the same type
-    // Don't use it to store unrelated values just to save variables.
-    // The value inside the [] is the size, number of elements, in the array
-    // 1. The size of the array must be a compile time constant. You can't change it at runtime.
-    // 2. Greater than 0. All arrays must store 1 element. 
-    // 3. Must be an integer (whole number) ex: 0.75 of a movie, how?
-    // Important point: Array is not part of the type. Changes how types work.
-    // Its tied to the variable, not the type.
-    // Other names for arrays: in C++ arrays are primitive, built in the language. There are other types, but none will not be used.
-    // Collection, vector set, list, array. Don't use any of them except array.
-    // size of bytes (array) is the size of the element by the size of the '[x]'.
-    // All arrays store their elements contiguosly in memory.
-    // Local variables are stored on stack so be careful of stack space.
-    const int MaximumMovies = 100;
-    Movie movies[MaximumMovies];
-
-        // Computer memory:
+void PointerDemo()
+{
+    // Computer memory:
     // Windows POV: Operating systems separate them in 2 blocks 
     // 1. Kornel OS, you can't enter it
     // 2. User code: Code runs here.
@@ -680,8 +652,8 @@ void main()
     // You must declare the pointer, its a type.
     //
 
-    int someValue = 100; 
-    int* ptrValue;      
+    int someValue = 100;
+    int* ptrValue;
                         // Local variables stored on the call stack, 4 bytes in size
                         // Local variable, stored on call stack, 4 or 8 bytes in size.      Pointer are memory address
                         // Stores a memory address, int* p; ----> |  0x1000   | 
@@ -689,7 +661,16 @@ void main()
                         // Issue, how to locate it. (have access to it) If you do, then you will break your computer.
                         // Need to give it a memory address that is valid.
                         // Capturing the memory address of local variables. Memory address is always an integer.
-    ptrValue = &someValue;   
+
+    // addressog_op ::= &E
+    //      Returns a pointer to the variable's memory.
+    //      Type of typeof(E)
+    //      someValue and ptrValue are local memory, is in the call stack.
+    //      Pointer can point anywhere in memory. (pointer can point in any part of any valid memory address.)
+    //  Scope: If pointer points local variable, then they go away. Allows pointers to last longer than scope. (memory leak)
+    // 
+    //
+    ptrValue = &someValue;
     std::cout << "Pointer value = " << ptrValue << " "
         << "Dereferenced value = " << *ptrValue << " "
         << "Some Value address = " << &someValue << " "
@@ -698,7 +679,62 @@ void main()
 
     *ptrValue = 200;
 
+    double* ptrRate = nullptr;  //Preferred (no way to use it wrong)
+    //*ptrRate = NULL;
+    // You will see NULL (=0) not save and potentially alows invalid code.
+    //ptrRate = NULL;
 
+    float* pfloat = nullptr;
+    int testInt = 10;
+    double testDouble = 4.5;
+    float testFloat = 8.7;
+
+    pfloat = &testFloat;       //float* = float*
+    *pfloat = testInt;          //float = int (type coersion)
+
+    // Pointers are same size but derefered values are not ==> Error
+    //  Compiler requires that pointers exactly match. even if the byte size will work, no type coersion will help you. (no type casting either)
+    // pfloat = &testDouble;       //float* = double*
+    //pfloat = &testInt;            //float* = int*       (never going to work well, and will never compile
+
+    // Validating pointers
+    //      1. Is not null (zero)       (Our only option)
+    //   (Can't really do)   2. Points to garbage, (by using unitialized data)   ex( the CC in the debugger) deailing with memory that is not initialized.
+    // (Can't really do)     3. Memory we don't own. (if you dereference to read or write, the OS will crash you)
+    //
+    // Testing for Null:
+    // 1. The long way, relational (only equality and inequality make sense)
+    if (pfloat != nullptr)  // The checks, if pointer not null, then it has a valid memory address.
+        *pfloat = 10;       //ex: if (boolValue == true) 
+    // 2. C way:(Don't use this) Comparing it to NULL.
+    if (pfloat != NULL)
+        *pfloat = 10;
+    //  3. The short way: How most C++ programmers use.
+    if (pfloat)             //ex: if (boolValue)    If pointer is
+        *pfloat = 10;
+
+    // Testing for NULL
+    if (pfloat == nullptr)      // easy to read
+        std::cout << "Is null" << std::endl;
+    //Preferred
+    if (!pfloat)
+        std::cout << "Is null" << std::endl;
+
+    // Pointers can poit to array elements
+    double taxRates[5] = {1.2, 3.4, 5.6, 7.8, 9.0};
+    double* pTaxRate = nullptr;
+    pTaxRate = &taxRates[1];
+
+    Movie movie;
+    Movie* pMovie = &movie;
+
+    movie.title = "Jaws";   // Member access dot
+    (*pMovie).title = "Jaws 2";
+    // preferred
+    pMovie->title = "Jaws 3";   //Member access for pointers ( -> )
+
+
+    // Naming pointers: ptr or p
     // Ensure the pointer is initialized to a pointer address, if you don't then you crash. The best way is to assign a value, some times you can't
     // 1. To use the key word nullptr; (most preferred, its 0) ( double* ptrRate = nullptr;)
     // 2. Old C++ and C code, not been recommended since a decade, only seen in old code. Not the same and won't be supported soon. (unsafe way: *ptrRate = NULL;)
@@ -727,7 +763,92 @@ void main()
     //  dereference_op ::= *  E
     // *ptrValue
 
+        // Array: multiple values stored as 1 into a single variable.
+    // arr_decl::= 'Type' 'identifier name' [expression] alocates space for 5 movies.
+    // By declaring 5 movies, we can store up to 5 movies, and each movie is independent to the other.
+    // Array stores elements which you can equate to values.
+    // restrictions: You can't declarate different types.
+    // array names are always plural.
+    // All elements have the same type
+    // Don't use it to store unrelated values just to save variables.
+    // The value inside the [] is the size, number of elements, in the array
+    // 1. The size of the array must be a compile time constant. You can't change it at runtime.
+    // 2. Greater than 0. All arrays must store 1 element. 
+    // 3. Must be an integer (whole number) ex: 0.75 of a movie, how?
+    // Important point: Array is not part of the type. Changes how types work.
+    // Its tied to the variable, not the type.
+    // Other names for arrays: in C++ arrays are primitive, built in the language. There are other types, but none will not be used.
+    // Collection, vector set, list, array. Don't use any of them except array.
+    // size of bytes (array) is the size of the element by the size of the '[x]'.
+    // All arrays store their elements contiguosly in memory.
+    // Local variables are stored on stack so be careful of stack space.
+}
 
+void DynamicMemoryDemo()
+{
+    /*while (true)
+    {
+        Movie* pMovie = new Movie;
+    }*/
+
+    // Pointers to existing data (local variables) defined at compulation.
+    //double taxRate = 4.5;
+    //double* pTaxRate = nullptr;
+
+    //// Simple Syntax:
+    //// Allocate 
+    //do
+    //{
+    //    // Prompt user for tax rate
+    //    std::cout << "Tax rate? ";
+    //    std::cin >> taxRate;
+    //    if (taxRate <= 0)
+    //        break;
+
+    //    // new_op ::= new T
+    //    // Dynamically allocates memory for a given type.
+    //    pTaxRate = new double;
+    //    *pTaxRate = taxRate;
+    //} while (true);
+    //std::cout << "Tax rate is " << *pTaxRate << std::endl;
+    
+    Movie* pMovie = nullptr;
+    while (Confirm("Do you want to add a movie? "))
+    {
+        Movie movie = AddMovie();
+
+
+        //Before allocating new pointer ensure old pointer is cleaned up
+        //if (pMovie)
+            delete pMovie;
+
+        pMovie = new Movie;
+        pMovie->id = movie.id;
+        pMovie->title = movie.title;
+        pMovie->description = movie.description;
+        pMovie->runLength = movie.runLength;
+        pMovie->releaseYear = movie.releaseYear;
+        //pMovie->genres = movies.genres;
+        pMovie->genreCount = movie.genreCount;
+        pMovie->isClassic = movie.isClassic;
+    }
+
+    if (pMovie)
+    {
+        ViewMovie(*pMovie);
+        delete pMovie;
+        pMovie = nullptr; //reset pointer
+
+        delete pMovie;  //May crash if freed again.
+    }
+}
+
+void main()
+{ 
+    DynamicMemoryDemo();
+
+    const int MaximumMovies = 100;
+    Movie movies[MaximumMovies];
 
     bool quit = false;
     while (!quit)
