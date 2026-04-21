@@ -100,10 +100,11 @@ void displayProgramHeader()
 /// @brief Prompts for the user numbers and store them in the array.
 /// @param list The array to store values.
 /// @param size The maximum capacity of array.
+/// @param currentCount The current number of elements already in the array (defaults to 0).
 /// @return The actual number of valid entries stored.
-int getNumbers(int list[], int size)
+int getNumbers(int list[], int size, int currentCount = 0)
 {
-    int count = 0;
+    int count = currentCount;
     int input = -1;
     while (count < size && input != 0)
     {
@@ -138,8 +139,14 @@ void displayArray(int list[], int count)
     std::cout << "     List of Current Numbers     " << std::endl;
     for (int i = 0; i < count; i++)
     {
-        std::cout << "Entry [" << i + 1 << "]: " << list[i] << std::endl;
+        std::cout << std::setw(5) << list[i];
+
+        if ((i + 1) % 10 == 0)
+        {
+            std::cout << std::endl;
+        }
     }
+    std::cout << std::endl;
     DisplayLine(30);
 }
 
@@ -155,7 +162,7 @@ int getLargestValue(int list[], int count)
     {
         if (list[i] > largest)
         {
-            largest = list[1];
+            largest = list[i];
         }
     }
     return largest;
@@ -208,11 +215,13 @@ char getMenuChoice()
 {
     char selection;
     std::cout << "\n     MAIN MENU      " << std::endl;
+
     std::cout << "A) Display All Numbers" << std::endl;
-    std::cout << "B) Find Largest Value" << std::endl;
-    std::cout << "C) Find Smallest Value" << std::endl;
-    std::cout << "D) Calculate Sum" << std::endl;
-    std::cout << "E) Calculate Mean" << std::endl;
+    std::cout << "L) Largest Value" << std::endl;
+    std::cout << "S) Sum Calculated" << std::endl;
+    std::cout << "M) Mean Calculated" << std::endl;
+    std::cout << "T) Tiniest Value" << std::endl;
+    std::cout << "I) Insert New Values" << std::endl;
     std::cout << "Q) Quit" << std::endl;
     std::cout << "Choice: ";
     std::cin >> selection;
@@ -237,22 +246,26 @@ int main()
             if (choice == 'A')
             {
                 displayArray(myNumbers, actualSize);
-            } else if (choice == 'B')
+            } else if (choice == 'L')
             {
                 std::cout << "\nThe largest value is: " << getLargestValue(myNumbers, actualSize) << std::endl;
-            } else if (choice == 'C')
-            {
-                std::cout << "\nThe smallest value is: " << getSmallestValue(myNumbers, actualSize) << std::endl;
-            } else if (choice == 'D')
+            } else if (choice == 'S')
             {
                 std::cout << "\nThe sum of all values is: " << getSum(myNumbers, actualSize) << std::endl;
-            } else if (choice == 'E')
+            } else if (choice == 'M')
             {
                 std::cout << "\nThe mean of all values is: " << std::fixed << std::setprecision(4) << getMean(myNumbers, actualSize) << std::endl;
+            } else if (choice == 'T')
+            {
+                std::cout << "\nThe tiniest value is: " << getSmallestValue(myNumbers, actualSize) << std::endl;
             }
+            else if (choice == 'I')
+            {
+                actualSize = getNumbers(myNumbers, MAX_SIZE, actualSize);
+            }  
             else if (choice != 'Q')
             {
-                std::cout << "\nInvalid choice. Select A, B, C, or Q." << std::endl;
+                std::cout << "\nInvalid choice. Select From Above Again." << std::endl;
             }
         }
     } else
