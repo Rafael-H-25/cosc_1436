@@ -271,23 +271,34 @@ std::string ReadString(std::string message)
 /// @param size 
 /// @param id 
 /// @return 
-int FindMovieById(Movie movies[], int size, int id)
+int FindMovieById(Movie* movies[], int size, int id)
 {
     for (int index = 0; index < size; ++index)
-        if (movies[index].id == id)
+        if (movies[index] && movies[index]->id == id)   //Short circuit evaluation
             return index;
+    // If not found
     return -1;
 }
 
-Movie AddMovie()
+// Returning pointers from functions is allowed
+// Use cases (cases when memory is still valid after func call returns)
+// 1. Dynamically allocated memory. If you dynamically alocate it, then returning it is a valid collection.
+// 2. Boundary case (rarely): Returning address of element of array passed as a parameter.
+// 3. (Never use) The address of a global variables. 
+// 
+// Not use Case
+// 1. Returning address of local variable or paramete.r
+
+
+Movie* AddMovie()
 {
     ClearInputBuffer();
 
-    Movie movie;
+    Movie* ptrMovie = new Movie;
     // Prompt for movie details
     
-    movie.title = ReadString("Enter title (required): ", true);
-    movie.description = ReadString("Enter description: ");
+    ptrMovie->title = ReadString("Enter title (required): ", true);
+    ptrMovie->description = ReadString("Enter description: ");
 
     for (int count = 0; count < MaximumGenres; ++count)
     {
@@ -295,55 +306,62 @@ Movie AddMovie()
         if (genre == "")
             break;
 
-        movie.genres[count] = genre;
-        ++movie.genreCount;
+        ptrMovie->genres[count] = genre;
+        ++ptrMovie->genreCount;
     }
 
-    movie.runLength = ReadInt("Enter run length (in minutes): ", 0);
-    movie.releaseYear = ReadInt("Enter release year (1900-2100): ", 1900, 2100);
+    ptrMovie->runLength = ReadInt("Enter run length (in minutes): ", 0);
+    ptrMovie->releaseYear = ReadInt("Enter release year (1900-2100): ", 1900, 2100);
 
-    movie.isClassic = Confirm("Is classic?");
-    return movie;
+    ptrMovie->isClassic = Confirm("Is classic?");
+    return ptrMovie;
 }
 
 // Arrays as parameters are always open arrays (Any size/undefined size) Any function you write musts support an open array.
 // arrays size always follows array parameters
-int AddMovie( Movie movies [], int size )
+int AddMovie( Movie* movies [], int size )
 {//you cannot determine the data at runtime in an array.
     // Get the movie details
-    Movie movie = AddMovie();
+    Movie* ptrMovie = AddMovie();
+    if (!ptrMovie)
+        return -1;
 
     //find an empty spot in the array
     static int id = 1;
     
     for (int index = 0; index < size; ++index)
     {
-        if (movies[index].title == "") // Find 1st element that isn't assigned
+        //if (movies[index].title == "") // Find 1st element that isn't assigned
+        if (!movies[index])
         {
-            movie.id = id++;
+            //movie.id = id++;
+            ptrMovie->id = id++;
 
-            movies[index] = movie;
+            // Horribly broken
+            movies[index] = ptrMovie;
             return index;
         }
     }
+
+
     return -1;
 }
 
-void DeleteMovie(Movie& movie)
+void DeleteMovie(Movie* movie)
 {
     // No movie = no work
-    if (movie.title == "")
+    if (!movie)
         return;
     
-    if (Confirm("Are you sure you want to delete '" + movie.title + "'"))
-        movie.title = "";
+    if (Confirm("Are you sure you want to delete '" + movie->title + "'"))
+        delete movie;
 }
 
 // Arrays are pass by value
 // Array behaves like pass by reference (parameter and arguement point to the same arrat in memory)
 // Since the parameter is a pass by value, you cannot change what the arguement refers to (the array)
 // Arrays cannot be the return type of a function, if you do, the function will fail the call.
-void DeleteMovies(Movie movies[], int size)
+void DeleteMovies(Movie* movies[], int size)
 {
     //Determine movie to delete
     int id = ReadInt("Enter ID of the movie to delete: ", 1);
@@ -357,46 +375,51 @@ void DeleteMovies(Movie movies[], int size)
     };
     //Delete it
     DeleteMovie(movies[index]);
+    movies[index] = nullptr;
 }
 
 /// @brief View movie details
 /// @param movie Movie to review
-void ViewMovie(Movie const& movie)
+void ViewMovie(Movie* ptrMovie)     //ViewMovie (Movie movie)   a pass by value.
 {
-    if (movie.title == "")
+
+    //Movie must exist
+    // (*ptrMovie).title
+    if (ptrMovie->title == "")
         return;
 
 
     
 
     //Display movie details
-    std::cout << "[" << movie.id << "] ";
-    std::cout << movie.title << " (" << movie.releaseYear << ")" << std::endl;
-    std::cout << "Length (in minutes) " << movie.runLength << std::endl;
+    std::cout << "[" << ptrMovie->id << "] ";
+    std::cout << ptrMovie->title << " (" << ptrMovie->releaseYear << ")" << std::endl;
+    std::cout << "Length (in minutes) " << ptrMovie->runLength << std::endl;
     std::cout << "Genres: ";
-    for (int index = 0; index < movie.genreCount; ++index)
+    for (int index = 0; index < ptrMovie->genreCount; ++index)
     {
             if (index > 0)
                 std::cout << ", ";
 
-            std::cout << movie.genres[index];
+            std::cout << ptrMovie->genres[index];
 
     }
     std::cout << std::endl;
 
-    std::cout << "User Rating: " << movie.userRating << std::endl;
-    std::cout << "Classic? " << (movie.isClassic ? "Yes" : "No") << std::endl;
+    std::cout << "User Rating: " << ptrMovie->userRating << std::endl;
+    std::cout << "Classic? " << (ptrMovie->isClassic ? "Yes" : "No") << std::endl;
     
-    std::cout << movie.description << std::endl;
+    std::cout << ptrMovie->description << std::endl;
 }
 
-void ViewMovies(Movie movies[], int size)
+void ViewMovies(Movie* movies[], int size)
 {
     //For range statement doesn't work with array parameters
 
     for (int index = 0; index < size; ++index)
     {
-        if (movies[index].title != "")
+        //if (movies[index].title != "")
+        if (movies[index])      //Checking for a valid pointer
             ViewMovie(movies[index]);
     }
 }
@@ -815,27 +838,27 @@ void DynamicMemoryDemo()
     Movie* pMovie = nullptr;
     while (Confirm("Do you want to add a movie? "))
     {
-        Movie movie = AddMovie();
-
+        //Movie movie = AddMovie();
+        pMovie = AddMovie();
 
         //Before allocating new pointer ensure old pointer is cleaned up
         //if (pMovie)
-            delete pMovie;
+        //    delete pMovie;
 
-        pMovie = new Movie;
-        pMovie->id = movie.id;
-        pMovie->title = movie.title;
-        pMovie->description = movie.description;
-        pMovie->runLength = movie.runLength;
-        pMovie->releaseYear = movie.releaseYear;
-        //pMovie->genres = movies.genres;
-        pMovie->genreCount = movie.genreCount;
-        pMovie->isClassic = movie.isClassic;
+        //pMovie = new Movie;
+        //pMovie->id = movie.id;
+        //pMovie->title = movie.title;
+        //pMovie->description = movie.description;
+        //pMovie->runLength = movie.runLength;
+        //pMovie->releaseYear = movie.releaseYear;
+        ////pMovie->genres = movies.genres;
+        //pMovie->genreCount = movie.genreCount;
+        //pMovie->isClassic = movie.isClassic;
     }
 
     if (pMovie)
     {
-        ViewMovie(*pMovie);
+        ViewMovie(pMovie);
         delete pMovie;
         pMovie = nullptr; //reset pointer
 
@@ -843,12 +866,43 @@ void DynamicMemoryDemo()
     }
 }
 
+//Steps to convert from pass by ref (variable/parameter) to pointer
+// 1. Change the parameter to a pointer
+// 2. Every reference to parameter changes to deref 
+// 3. Validate the pointer
+// 4. (Caller side) Change argument to pointer
+
+void CPointerVsReferenceDemo(Movie* movie) // Pass by value ( The C way )
+{
+    if (!movie)
+        return;
+
+    //(*movie).title = ;
+    movie->title = "New " + movie->title;
+}
+
+void PointerVsReferenceDemo(Movie& movie) // pass by ref   (C++ way)
+{
+    // No need to check for null (they are safe)
+    movie.title = "New " + movie.title;
+}
+
+void PointerToReferenceCaller()
+{
+    Movie movie;
+
+    Movie& refMovie = movie;    // Reference parameters are just glorified reference variables
+
+    //PointerVsReferenceDemo(movie);    //(&movie)
+    CPointerVsReferenceDemo(&movie);    //(&movie)
+}
+
 void main()
 { 
-    DynamicMemoryDemo();
+    //DynamicMemoryDemo();
 
     const int MaximumMovies = 100;
-    Movie movies[MaximumMovies];
+    Movie* movies[MaximumMovies] = {0};
 
     bool quit = false;
     while (!quit)
