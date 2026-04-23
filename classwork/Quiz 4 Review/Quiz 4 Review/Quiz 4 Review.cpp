@@ -1,4 +1,4 @@
-// Quiz 4 Review.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// Quiz 4 Review
 //
 //Arrays:   (Think of an array like a row of lockers in a hallway)
 //                  A data structure used to store multiple values of the same type in a single, contiguous block of memory.
