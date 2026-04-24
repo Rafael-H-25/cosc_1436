@@ -168,6 +168,24 @@ char getMenuChoice()
     return toupper(selection);  // Does q or Q automatically.
 };
 
+/// @brief Processes the user's menu choice and calls the corresponding array function.
+/// @param choice The character representing the user's menu choice.
+/// @param myNumbers The array containing the integer data to pe processed.
+/// @param actualSize The current number of elements in the array.
+void handleMenuChoice(char choice, int myNumbers[], int &actualSize)
+{
+    switch (choice) 
+    {
+        case 'A': displayArray(myNumbers, actualSize); break;
+        case 'L': std::cout << "\nLargest: " << getLargestValue(myNumbers, actualSize) << std::endl; break;
+        case 'S': std::cout << "\nSum: " << getSum(myNumbers, actualSize) << std::endl; break;
+        case 'M': std::cout << "\nMean: " << std::fixed << std::setprecision(4) << getMean(myNumbers, actualSize) << std::endl; break;
+        case 'T': std::cout << "\nSmallest: " << getSmallestValue(myNumbers, actualSize) << std::endl; break;
+        case 'I': actualSize = getNumbers(myNumbers, MAX_SIZE, actualSize); break;
+        case 'Q': break;
+        default : std::cout << "\nInvalid choice. Select From Above Again." << std::endl;
+    }
+}
 int main()
 {
     int myNumbers[MAX_SIZE];
@@ -177,36 +195,12 @@ int main()
     displayProgramHeader();
     actualSize = getNumbers(myNumbers, MAX_SIZE);
 
-    if (actualSize > 0)
+    if (actualSize > 0)    
     {
         while (choice != 'Q')
         {
             choice = getMenuChoice();
-
-            if (choice == 'A')
-            {
-                displayArray(myNumbers, actualSize);
-            } else if (choice == 'L')
-            {
-                std::cout << "\nThe largest value is: " << getLargestValue(myNumbers, actualSize) << std::endl;
-            } else if (choice == 'S')
-            {
-                std::cout << "\nThe sum of all values is: " << getSum(myNumbers, actualSize) << std::endl;
-            } else if (choice == 'M')
-            {
-                std::cout << "\nThe mean of all values is: " << std::fixed << std::setprecision(4) << getMean(myNumbers, actualSize) << std::endl;
-            } else if (choice == 'T')
-            {
-                std::cout << "\nThe tiniest value is: " << getSmallestValue(myNumbers, actualSize) << std::endl;
-            }
-            else if (choice == 'I')
-            {
-                actualSize = getNumbers(myNumbers, MAX_SIZE, actualSize);
-            }  
-            else if (choice != 'Q')
-            {
-                std::cout << "\nInvalid choice. Select From Above Again." << std::endl;
-            }
+            handleMenuChoice(choice, myNumbers, actualSize);
         }
     } else
     {
