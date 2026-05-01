@@ -18,7 +18,7 @@
 // Must be stored in a single byte system.
 // The difference is different when you ask for the string.
 // 
-// Char set: a numeric value that goes to that character set.
+// Char set: a numeric value that goes to that character set. An encoding. 
 // We have been using ANSI set. 
 //  ACS 2
 // Both are one byte and uses char type.
@@ -115,9 +115,133 @@ void ClassifiedChars()
 }
 
 
+// C strings
+// Functions used in C
+// C++ String fuctions
+// 
+
+void CStringDemo()
+{
+    char letterGrades[5] = {'A', 'B', 'C', 'D', 'F'};
+    char* pLetterGrades = letterGrades;         // A string in C strings
+    
+    // Every string like this ends with a NULL terminator
+    char const* name = "Bob";       // Length 4 B,o,b and the NULL
+
+    // Only time where implicit string important
+    char fixedName[] = "Jean";      // Lenght 5 J,e,a,n and the NULL
+
+
+    // Cout sees the string not the pointer array.
+    //std::cout << letterGrades << std::endl;
+    //std::cout << name << std::endl;
+
+    //Common C functions
+    //  string functiond start with str
+    // strlen(str) returns # of bytes/chars in the string, excluding NULL.
+    int len = strlen(fixedName);        // 4
+
+
+    char name1[100] = "Mark";
+    char name2[200] = {0};
+
+    //Copying a string
+    //strcpy(name2, name1);       // strcpy(target, src) copies scr to target, better be big enough. Null terminate the string
+    // A very dangerous function and the compiler will flag it.
+    // Alternate version:
+    //strncpy(name2, name1, 100)      // strncpy(target, src, size) copies scr to target up to size.
+        // Do not use and won't compile.
+    // The safe function
+    strncpy_s(name2, 200, name1, 100); //strncpy_s(target, size, src, size) <---  In C style.
+    
+    // Concat Strings:  (str +=v)
+    
+    // The size of the strings are more important.
+    //strcat(name2, name1);   // strcat(target, scr) concats source to target.
+    // Need to be aware of how many characters are in the array. Very dangerous.
+    //strncat(name2, name1, 100); // strncat(target, scr, size)
+    // Not safe and won't compile here.
+    strncat_s(name2, 200, name1, 100);  // strncat_s(target, size, src, size)
+
+    //String Comparison: C++, (x == y)
+    int areEqual = _stricmp(name2, name1);      // _stricmp(str1, str2) int(<0 str1 < str2, = 0 str1 == str2, > 0 str1 > str2)
+    areEqual = strcmp(name2, name1);    //Case sensitive version
+
+    char fullName[] = "Bob Miller";
+    char* pSpace = strstr(fullName, " ");  // strstr(target, stringtofind) char*, pointer to substring or nullptr, case sensitive
+    // Example a school name and filter the school name or college, It won't support that.
+    if (pSpace)
+    {
+        std::cout << "Last name = " << pSpace << std::endl;
+    } else {
+        std::cout << "No last name" << std::endl;
+    }
+
+    //Number conversion
+    char number[100] = {0};
+    do
+    {
+        std::cin >> number;
+        //int valueEntered = atoi(number);        // atoi (Ascii to Int)         Returns the number until it isn't a number: ex 123wer4 -> stops at 123.
+        //double valueEntered = atof(number);       //atof (Ascii to floating point)
+        
+        char* endPtr = nullptr;
+        int valueEntered = strtol(number, &endPtr, 10);
+        std::cout << "Interger value = " << valueEntered << std::endl;      
+        if (valueEntered == 0)
+            break;
+    } while (true);
+
+    //int to string
+    //_itoa(100, number, 10);     // "100"
+    // Unsafe
+    _itoa_s(100, number, 100, 10);
+
+}
+
+void CppStringDemo()
+{
+    std::string name = "Bob";
+
+    // Get the length
+    int len = name.length();        //.length() -> # of chars in the string (strlen)
+
+    // Case insensitive comparison _stricmp
+    // .c_str() char* returns pointer to C string equivalent
+    std::string value1 = "Hello", value2 = "hello";
+    bool areEqual = value1 == value2;
+    //areEqual = stricmp(value1.c_str(), value2.c_str()) == 0;
+
+    // Assignment (strncpy_s)
+    name = "Sue";
+
+    // Concatrnation (strncat_s)
+    name += " Miller";
+    name.append(" Jr");
+
+    //Clear a string (strcpy(buffer, "");)
+    name = "";
+    name.clear();
+
+    name = "Sue Miller";
+
+    // Find in string (strstr)
+    int index = name.find(" ", 0);      //find(stringtofind, index) -> zero-based index of substring
+    if (index >= 0)
+    {
+        std::string firstName = name.substr(0, index);
+        std::string lastName = name.substr(index);      //substr(start, count) returns substring starting at start to count
+        std::cout << "First Name = " << firstName
+            << " Last name = " << lastName << std::endl;
+    }
+}
+
 int main()
 {
-    ClassifiedChars();
+    CppStringDemo();
+    //CStringDemo();
+
+    //ClassifiedChars();
 
     // C++ string (ANSI- 1 byte per char):
     char absuChar = 'A';
