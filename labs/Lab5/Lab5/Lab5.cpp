@@ -1,5 +1,5 @@
 /*
-*   Lab 4
+*   Lab 5
 *   Rafael Hernandez
 *   COSC 1436
 *   Spring 2026
@@ -32,7 +32,7 @@ void clearInputBuffer()
 
 /// @brief Prompts for speed and validates between 1 and 60 MPH.
 /// @return Returns the speed number.
-int GetSpeed()
+int getSpeed()
 {
     int speed;
     while (true) 
@@ -180,11 +180,11 @@ void handleRemoveOption(Stop* stops[], int size)
     if (targetStop != nullptr)
     {
         removeStop(stops, size, targetStop);
-        std::cout << "Success: Stop number" << stopNum << "is now removed." << std::endl;
+        std::cout << "Success: Stop number " << stopNum << " is now removed." << std::endl;
     }
     else
     {
-        std::cout << "Error: Stop number" << stopNum << "doesn't exist." << std::endl;
+        std::cout << "Error: Stop number " << stopNum << " doesn't exist." << std::endl;
     }
 }
 
@@ -214,7 +214,7 @@ void handleViewTrip(Stop* trip[], const int maxStops, int speed)
 {
     if (trip[0] == nullptr)
     {
-        std::cout << "Trip currently has no stops." << std::endl;
+        std::cout << "\nTrip currently has no stops." << std::endl;
         return;
     }
 
@@ -223,14 +223,14 @@ void handleViewTrip(Stop* trip[], const int maxStops, int speed)
 
     int prevX = 0, prevY = 0;
 
-    std::cout << "\n      Current Trip Details      " << std::endl;
-    
+    std::cout << "\n                Current Trip Details" << std::endl;
+    displayLine(65);
     std::cout << std::left << std::setw(8) << "Stop #"
-        << std::right << std::setw(8) << "X"
-        << std::right << std::setw(8) << "Y"
-        << std::right << std::setw(15) << "Distance (miles)"
+        << std::right << std::setw(10) << "X"
+        << std::right << std::setw(10) << "Y"
+        << std::right << std::setw(20) << "Dist (miles)"
         << std::right << std::setw(15) << "Time (mins)" << std::endl;
-        displayLine(60);
+        displayLine(65);
 
         for (int index = 0; index < maxStops; index++)
         {
@@ -252,8 +252,8 @@ void handleViewTrip(Stop* trip[], const int maxStops, int speed)
         
             }
         }
-        displayLine(54);
-        std::cout << "Total Distance:   " << std::fixed << std::setprecision(2) << totalDistance << " miles" << std::endl;
+        displayLine(65);
+        std::cout << "Total Distance: " << std::fixed << std::setprecision(2) << totalDistance << " miles" << std::endl;
         std::cout << "Total Travel Time: " << std::ceil(totalTime) << " minutes" << std::endl;
     
     std::cout << std::endl;
@@ -265,7 +265,7 @@ void handleViewTrip(Stop* trip[], const int maxStops, int speed)
 void handleAddStop(Stop* trip[], const int maxStops)
 {
     Stop* newStop = new Stop;
-    std::cout << "      Add New Stop        " << std::endl;
+    std::cout << "\n      Add New Stop        " << std::endl;
     newStop->x = getValidatedCoordinate("Enter X coordinate (-100 to 100): ");
     newStop->y= getValidatedCoordinate("Enter Y coordinate (-100 to 100): ");
     if (addStopToTrip(trip, maxStops, newStop))
@@ -283,13 +283,13 @@ void handleAddStop(Stop* trip[], const int maxStops)
 /// @brief Displays program information.
 void displayProgramHeader()
 {
-    displayLine(50);
+    displayLine(35);
     std::cout << "      Trip Management System        " << std::endl;
-    displayLine(50);
+    displayLine(35);
     std::cout << "Programmer: Rafael Hernandez" << std::endl;
     std::cout << "Course: COSC 1436" << std::endl;
     std::cout << "Semester: Spring 2026" << std::endl;
-    displayLine(50);
+    displayLine(35);
     std::cout << std::endl;
 };
 
@@ -302,7 +302,7 @@ char getMenuChoice()
 
     while (!isValid)
     {
-        std::cout << "     Main Menu        " << std::endl;
+        std::cout << "\n     Main Menu        " << std::endl;
         std::cout << "A) Add Stop" << std::endl;
         std::cout << "V) View Trip" << std::endl;
         std::cout << "R) Remove Stop" << std::endl;
@@ -363,11 +363,10 @@ void manageMenu(Stop* trip[], const int maxStops, int speed)
 
 int main()
 {   
-    const int Max_Stops = 100;
-    int speed = GetSpeed();
-    Stop* trip[Max_Stops] = {nullptr};
-    
     displayProgramHeader();
+    const int Max_Stops = 100;
+    int speed = getSpeed();
+    Stop* trip[Max_Stops] = {nullptr};
     manageMenu(trip, Max_Stops, speed);
 
     for (int index = 0; index < Max_Stops; index++)
