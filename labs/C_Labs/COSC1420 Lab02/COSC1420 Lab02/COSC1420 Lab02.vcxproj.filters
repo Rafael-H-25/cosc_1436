@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TargetHeartRateCalculator.c">
+    <ClCompile Include="TargetHeartRateCalculatorRHernandez.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="COSC1420 Lab02/COSC1420 Lab02.vcxproj" />
+  <Project Path="COSC1420 Lab02/COSC1420 Lab02.vcxproj" Id="4eea2fbc-6c5b-4bb5-8ae4-caf3ed18af7b" />
 </Solution>
