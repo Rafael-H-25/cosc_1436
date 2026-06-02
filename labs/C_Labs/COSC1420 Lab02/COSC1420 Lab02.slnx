@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="COSC1420 Lab02/COSC1420 Lab02.vcxproj" />
+</Solution>
