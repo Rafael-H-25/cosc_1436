@@ -6,7 +6,7 @@ Program Description: This code calculates the weekly earnings for salesmen using
 salary styles and a 10% commisions. This code tracks the salary ranges using a one-dimensinal array of counters.
 
 Programmer: Rafael Hernandez
-Date: 6/10/2026
+Date: 6/19/2026
 
 Pseudocode:
 1. Initialize constants
