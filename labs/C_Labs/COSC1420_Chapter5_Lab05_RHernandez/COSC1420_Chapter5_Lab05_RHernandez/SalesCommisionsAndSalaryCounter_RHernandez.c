@@ -1,7 +1,7 @@
 /*
 
 Course Name: Summer of 2026, COSC 1420, Chapter 6, Lab6
-Program Name: Sales Con=mimissions & Salary Counter
+Program Name: Sales Commissions & Salary Counter
 Program Description: This code calculates the weekly earnings for salesmen using specific base
 salary styles and a 10% commisions. This code tracks the salary ranges using a one-dimensinal array of counters.
 
