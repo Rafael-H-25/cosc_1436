@@ -144,7 +144,7 @@ void multiplyValues(double a, double b)
 {
     printf("%.2f * %.2f is %.2f\n", a, b, a * b);
 }
-
+ 
 void divideValues(double a, double b)
 {
     // Explicit runtime safety constraints to trap division-by-zero crashes.
