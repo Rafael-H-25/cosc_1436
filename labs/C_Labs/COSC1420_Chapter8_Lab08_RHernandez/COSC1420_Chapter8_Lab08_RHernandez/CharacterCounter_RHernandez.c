@@ -1,6 +1,6 @@
 /*
 
-Course Name: Summer of 2026, COSC 1420, Chapter 7, Lab 7
+Course Name: Summer of 2026, COSC 1420, Chapter 8, Lab 8
 Program Name: Character Counter Code
 Program Description: This code is a string-manipulation type code that is capable to enable us to count
 the number of characters (both letters and numbers) in strings of data.
